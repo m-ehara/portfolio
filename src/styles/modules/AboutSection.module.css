@@ -1,0 +1,176 @@
+.specialtiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-5);
+  margin-bottom: var(--space-10);
+}
+
+.specialtyCard {
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.specialtyCardHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2-5);
+}
+
+.specialtyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.specialtyTitle {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: 700;
+}
+
+.specialtyDesc {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+}
+
+.specialtyDetails {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+
+  & li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+  }
+}
+
+.checkIcon {
+  color: var(--accent-secondary);
+  margin-top: var(--space-1);
+  flex-shrink: 0;
+}
+
+.careerAndMatrixGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-5);
+}
+
+.panelCard {
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.panelHeader {
+  margin-bottom: var(--space-5);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.careerTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.careerBlock {
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--accent-primary);
+}
+
+.careerPeriodBadge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--accent-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.careerBlockTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+}
+
+.careerBlockDesc {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+}
+
+.matrixSubblock {
+  margin-bottom: var(--space-5);
+}
+
+.matrixSubtitle {
+  margin: 0 0 var(--space-2-5);
+  font-size: var(--font-size-md);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.roleBadgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--space-2);
+}
+
+.phaseBadgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-2);
+}
+
+.roleCell,
+.phaseCell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--font-size-sm);
+}
+
+.noExp {
+  opacity: 0.45;
+}
+
+.rankSymbol {
+  font-weight: 700;
+  color: var(--accent-secondary);
+}
+
+.legendInline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2-5);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}

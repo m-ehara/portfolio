@@ -1,0 +1,180 @@
+.skillsControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.categoryTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tabBtn {
+  padding: var(--space-2) var(--space-3-5);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--border-strong);
+  }
+}
+
+.tabBtnActive {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+
+  &:hover {
+    border-color: var(--accent-primary);
+  }
+}
+
+.skillsSearchRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.legendBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding: var(--space-2-5) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.rankBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.rank5 {
+  background: var(--rank-5-bg);
+  color: var(--rank-5-fg);
+}
+
+.rank4 {
+  background: var(--rank-4-bg);
+  color: var(--rank-4-fg);
+}
+
+.rank3 {
+  background: var(--rank-3-bg);
+  color: var(--rank-3-fg);
+}
+
+.rank2 {
+  background: var(--rank-2-bg);
+  color: var(--rank-2-fg);
+}
+
+.rank1 {
+  background: var(--rank-1-bg);
+  color: var(--rank-1-fg);
+}
+
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: var(--space-3);
+}
+
+.skillCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+  }
+}
+
+.skillSelected {
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 2px var(--accent-secondary);
+}
+
+.skillCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1-5);
+}
+
+.skillName {
+  font-weight: 600;
+  font-size: var(--font-size-md);
+}
+
+.skillBarTrack {
+  width: 100%;
+  height: var(--space-1-5);
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.skillBarFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.rankFill5 {
+  background: var(--rank-5-fg);
+}
+
+.rankFill4 {
+  background: var(--rank-4-fg);
+}
+
+.rankFill3 {
+  background: var(--rank-3-fg);
+}
+
+.rankFill2 {
+  background: var(--rank-2-fg);
+}
+
+.rankFill1 {
+  background: var(--rank-1-fg);
+}
+
+.skillYears {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}

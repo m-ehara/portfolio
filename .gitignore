@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.wrangler
+.dev.vars
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+coverage
+
+# Playwright VRT snapshots and reports
+src/test/*-snapshots/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Private portfolio data
+src/data/private/
+
+# Antigravity system skills
+skills/system/run-workflow/
+

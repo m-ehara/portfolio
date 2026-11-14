@@ -1,0 +1,51 @@
+{
+  "name": "my-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "playwright test",
+    "test:ui:update": "playwright test --update-snapshots",
+    "lint": "oxlint src worker",
+    "fmt": "oxfmt -w src worker scripts",
+    "fmt:check": "oxfmt --check src worker scripts",
+    "kv:export": "node scripts/sync-kv.ts",
+    "kv:put:local": "node scripts/sync-kv.ts --put=local",
+    "kv:put:remote": "node scripts/sync-kv.ts --put=remote",
+    "deploy": "VITE_IGNORE_PRIVATE_DATA=true pnpm run build && pnpm exec wrangler deploy"
+  },
+  "dependencies": {
+    "lucide-react": "^1.16.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "jsdom": "^26.1.0",
+    "oxfmt": "^0.1.0",
+    "oxlint": "^0.16.0",
+    "typescript": "^7.0.2",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.3",
+    "wrangler": "^4.14.0"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": ["darwin", "linux"],
+      "cpu": ["arm64", "x64"]
+    }
+  }
+}

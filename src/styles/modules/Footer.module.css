@@ -1,0 +1,21 @@
+.siteFooter {
+  padding: var(--space-8) 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.footerInner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.footerBrand {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.footerSep {
+  margin: 0 var(--space-2);
+}

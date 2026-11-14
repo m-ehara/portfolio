@@ -1,0 +1,359 @@
+.siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--space-16);
+  gap: var(--space-3);
+}
+
+.brandGroup {
+  flex-shrink: 0;
+}
+
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brandIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brandName {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.brandRole {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.mainNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+
+  @media (max-width: 860px) {
+    display: none;
+  }
+}
+
+.navLink {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--accent-secondary);
+  }
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+
+  @media (max-width: 860px) {
+    gap: var(--space-1-5);
+  }
+}
+
+.actionBtn,
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-elevated);
+  }
+}
+
+.iconBtn {
+  @media (max-width: 860px) {
+    padding: var(--space-1-5) var(--space-2-5);
+  }
+}
+
+.desktopOnlyAction {
+  @media (max-width: 860px) {
+    display: none;
+  }
+}
+
+.btnLabelDesktop {
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.modeToggleBtnActive {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+
+  &:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    opacity: 0.95;
+  }
+}
+
+.langCode {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.mobileMenuBtn {
+  display: none;
+  padding: var(--space-2) var(--space-2-5);
+
+  @media (max-width: 860px) {
+    display: inline-flex;
+  }
+}
+
+.mobileMenuBtnActive {
+  border-color: var(--accent-primary);
+  color: var(--accent-secondary);
+  background: var(--bg-elevated);
+}
+
+.mobileMenuDrawer {
+  display: none;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-card);
+  animation: mobileMenuSlideDown 0.18s ease-out;
+
+  @media (max-width: 860px) {
+    display: block;
+  }
+}
+
+@keyframes mobileMenuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobileMenuInner {
+  padding-top: var(--space-3-5);
+  padding-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-5);
+}
+
+.mobileNavLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover,
+  &:active {
+    background: var(--bg-elevated);
+    color: var(--accent-secondary);
+  }
+}
+
+.mobileMenuActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2-5);
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mobileActionBtn {
+  justify-content: center;
+  padding: var(--space-2-5) var(--space-3-5);
+  font-size: var(--font-size-md);
+  width: 100%;
+}
+
+/* QR Code Share Modal */
+.qrModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(6px);
+  animation: mobileMenuSlideDown 0.16s ease-out;
+}
+
+.qrModalCard {
+  width: 100%;
+  max-width: 390px;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.qrModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.qrModalTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.qrModalIcon {
+  color: var(--accent-secondary);
+  flex-shrink: 0;
+}
+
+.qrModalTitle {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: 700;
+}
+
+.qrCloseBtn {
+  padding: var(--space-1-5) var(--space-2);
+}
+
+.qrModalSubtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.qrSvgFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3-5);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  align-self: center;
+}
+
+.qrSvgImage {
+  width: 220px;
+  height: 220px;
+  display: block;
+}
+
+.qrUrlBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2-5) var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.qrUrlText {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qrCopyBtn {
+  padding: var(--space-1-5) var(--space-2-5);
+  font-size: var(--font-size-xs);
+}
+
+.qrDownloadRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2-5);
+}
+
+.qrDownloadBtn {
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
