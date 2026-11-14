@@ -1,0 +1,5 @@
+BASIC_AUTH_USER=admin
+BASIC_AUTH_PASS=change-me-strong-password
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+# Optional: set your KV Namespace ID here for `pnpm run kv:put:remote` without editing wrangler.jsonc
+# CLOUDFLARE_KV_NAMESPACE_ID=your-kv-namespace-id

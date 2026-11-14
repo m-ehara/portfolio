@@ -1,0 +1,246 @@
+.resumeSheetWrapper {
+  padding: var(--space-8) 0 var(--space-16);
+
+  @media print {
+    padding: 0 !important;
+  }
+}
+
+.resumeBanner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3-5) var(--space-5);
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  font-size: var(--font-size-md);
+}
+
+.resumeSheetPage {
+  background: #ffffff;
+  color: #111827;
+  padding: var(--space-8);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-8);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+
+  @media print {
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.pageBreakBefore {
+  @media print {
+    page-break-before: always;
+  }
+}
+
+.sheetHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #1e293b;
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.sheetMainTitle {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+}
+
+.sheetMetaRight {
+  text-align: right;
+  font-size: var(--font-size-xs);
+}
+
+.sheetSection {
+  margin-bottom: var(--space-3-5);
+}
+
+.sheetSectionTitle,
+.sheetSubtitleBar {
+  background: #cbd5e1;
+  color: #0f172a;
+  font-weight: 700;
+  padding: var(--space-1) var(--space-2-5);
+  border: 1px solid #475569;
+  font-size: var(--font-size-xs);
+}
+
+.sheetBoxContent {
+  border: 1px solid #475569;
+  border-top: none;
+  padding: var(--space-2-5) var(--space-3);
+}
+
+.sheetLineBold {
+  margin: 0;
+  font-weight: 700;
+}
+
+.mtXs {
+  margin-top: var(--space-1);
+}
+
+.sheetPrList,
+.sheetPrSublist {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-4);
+  list-style: none;
+}
+
+.sheetCareerItem {
+  & + .sheetCareerItem {
+    margin-top: var(--space-2);
+  }
+}
+
+.sheetParagraph {
+  margin: 0.15rem 0 0;
+}
+
+.sheetLegendLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3-5);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.sheetTable,
+.sheetProjectsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-xs);
+
+  & th,
+  & td {
+    border: 1px solid #475569;
+    padding: var(--space-1) var(--space-1-5);
+    vertical-align: top;
+  }
+
+  & th {
+    background: #e2e8f0;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.sheetThCategory {
+  background: #94a3b8 !important;
+  color: #0f172a;
+  width: 90px;
+}
+
+.sheetSkillGroup {
+  display: flex;
+  border: 1px solid #475569;
+  border-top: none;
+}
+
+.sheetSkillLabel {
+  width: 100px;
+  flex-shrink: 0;
+  background: #94a3b8;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #475569;
+  padding: var(--space-1);
+  text-align: center;
+}
+
+.sheetSkillCells {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.sheetSkillCell {
+  width: 110px;
+  border-right: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  text-align: center;
+
+  & .cellHead {
+    background: #f1f5f9;
+    font-size: var(--font-size-2xs);
+    padding: 0.15rem 0.2rem;
+    border-bottom: 1px solid #cbd5e1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & .cellVal {
+    padding: 0.15rem;
+    font-weight: 700;
+  }
+}
+
+.sheetTableScroll {
+  @media (max-width: 768px) {
+    overflow-x: auto;
+  }
+}
+
+.sheetProjTitle {
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.sheetProjBlock {
+  margin-bottom: 0.2rem;
+}
+
+.compactList {
+  margin: 0;
+  padding-left: var(--space-3);
+  list-style: none;
+}
+
+.compactPhases {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: var(--font-size-2xs);
+}
+
+.compactPhaseItem {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.compactPhaseNone {
+  color: #94a3b8;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.fontMono {
+  font-family: var(--font-mono);
+}
+
+.fontBold {
+  font-weight: 700;
+}
+
+.subMuted {
+  color: #475569;
+  font-size: var(--font-size-2xs);
+}
