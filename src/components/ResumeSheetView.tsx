@@ -75,6 +75,10 @@ export const ResumeSheetView = ({
     0,
     data.roleExperiences.length - data.phaseExperiences.length,
   )
+  const roleGapColSpan = Math.max(
+    0,
+    data.phaseExperiences.length - data.roleExperiences.length,
+  )
 
   return (
     <div className={styles.resumeSheetWrapper}>
@@ -174,6 +178,7 @@ export const ResumeSheetView = ({
                   {data.roleExperiences.map((r) => (
                     <th key={r.role}>{r.label[locale]}</th>
                   ))}
+                  {roleGapColSpan > 0 && <th colSpan={roleGapColSpan} />}
                 </tr>
                 <tr>
                   {data.roleExperiences.map((r) => (
@@ -181,6 +186,7 @@ export const ResumeSheetView = ({
                       {r.rank === "-" ? "" : r.rank}
                     </td>
                   ))}
+                  {roleGapColSpan > 0 && <td colSpan={roleGapColSpan} />}
                 </tr>
                 <tr>
                   <th rowSpan={2} className={styles.sheetThCategory}>

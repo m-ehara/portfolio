@@ -14,6 +14,31 @@ interface QrCodeModalProps {
 const buildQrSvgMarkup = (svgPath: string): string =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" width="512" height="512" shape-rendering="crispEdges">\n  <rect width="100%" height="100%" fill="#ffffff" rx="2" />\n  <path d="${svgPath}" fill="#0f172a" />\n</svg>\n`
 
+const copyTextToClipboard = async (text: string): Promise<boolean> => {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      // Fall back to execCommand below
+    }
+  }
+  try {
+    const textarea = document.createElement("textarea")
+    textarea.value = text
+    textarea.setAttribute("readonly", "")
+    textarea.style.position = "fixed"
+    textarea.style.opacity = "0"
+    document.body.appendChild(textarea)
+    textarea.select()
+    const copied = document.execCommand("copy")
+    document.body.removeChild(textarea)
+    return copied
+  } catch {
+    return false
+  }
+}
+
 export const QrCodeModal = ({
   portfolioUrl,
   portfolioQrSvgPath,
@@ -21,8 +46,7 @@ export const QrCodeModal = ({
   onClose,
 }: QrCodeModalProps) => {
   const [copiedUrl, setCopiedUrl] = useState(false)
-  const [pngDownloadHref, setPngDownloadHref] =
-    useState<string>("/qr-portfolio.png")
+  const [pngDownloadHref, setPngDownloadHref] = useState<string | null>(null)
   const t = UI_TEXT[locale]
 
   const svgDownloadHref = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
@@ -70,10 +94,8 @@ export const QrCodeModal = ({
   }, [svgDownloadHref])
 
   const handleCopyUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(portfolioUrl)
-      setCopiedUrl(true)
-    } catch {
+    const copied = await copyTextToClipboard(portfolioUrl)
+    if (copied) {
       setCopiedUrl(true)
     }
   }
@@ -132,7 +154,7 @@ export const QrCodeModal = ({
 
         <div className={styles.qrDownloadRow}>
           <a
-            href={pngDownloadHref}
+            href={pngDownloadHref ?? svgDownloadHref}
             download="portfolio-qr.png"
             className={`secondary-btn ${styles.qrDownloadBtn}`}
           >

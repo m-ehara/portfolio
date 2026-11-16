@@ -107,7 +107,6 @@ const isValidPortfolioData = (value: unknown): boolean => {
   }
 
   return (
-    typeof obj.updatedAt === "string" &&
     isLocalizedText(obj.name) &&
     typeof obj.handle === "string" &&
     typeof obj.githubUrl === "string" &&

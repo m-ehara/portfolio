@@ -51,6 +51,9 @@ export const SkillsSection = ({
   const [query, setQuery] = useState("")
 
   const filtered = filterSkills(skills, { category, minRank, query })
+  const hasDirectTechMatch =
+    selectedTech !== "all" &&
+    skills.some((s) => matchesTech(s.name, selectedTech))
 
   return (
     <section id="skills" className="section">
@@ -143,7 +146,10 @@ export const SkillsSection = ({
             {filtered.map((skill) => {
               const score = RANK_SCORE[skill.rank]
               const isSelected =
-                selectedTech !== "all" && matchesTech(skill.name, selectedTech)
+                selectedTech !== "all" &&
+                (hasDirectTechMatch
+                  ? matchesTech(skill.name, selectedTech)
+                  : matchesTech(selectedTech, skill.name))
 
               return (
                 <button
@@ -153,7 +159,11 @@ export const SkillsSection = ({
                     isSelected ? styles.skillSelected : ""
                   }`}
                   onClick={() => {
-                    const cleanName = skill.name.split(" (")[0]
+                    if (isSelected) {
+                      onSelectTech("all")
+                      return
+                    }
+                    const cleanName = skill.name.split(" (")[0] ?? skill.name
                     onSelectTech(cleanName)
                   }}
                 >
