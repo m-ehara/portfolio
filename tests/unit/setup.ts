@@ -3,7 +3,7 @@ import { beforeEach } from "vitest"
 import {
   PORTFOLIO_DATA_STORAGE_KEY,
   TURNSTILE_VERIFY_STORAGE_KEY,
-} from "../data/constants"
+} from "../../src/data/constants"
 
 beforeEach(() => {
   window.sessionStorage.removeItem(PORTFOLIO_DATA_STORAGE_KEY)

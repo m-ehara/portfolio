@@ -1,8 +1,8 @@
 import { createElement } from "react"
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
-import App from "../App"
-import { Footer } from "../components/Footer"
+import App from "../../src/App"
+import { Footer } from "../../src/components/Footer"
 import {
   CAREER_START,
   FREELANCE_START,
@@ -18,9 +18,9 @@ import {
   formatYearMonthSlash,
   portfolioData,
   samplePortfolioData,
-} from "../data/portfolioData"
-import type { PortfolioData } from "../types/portfolio"
-import type { TurnstileRenderOptions } from "../vite-env"
+} from "../../src/data/portfolioData"
+import type { PortfolioData } from "../../src/types/portfolio"
+import type { TurnstileRenderOptions } from "../../src/vite-env"
 
 describe("portfolioData & filter utilities", () => {
   it("loads valid portfolio data with projects and skills", () => {

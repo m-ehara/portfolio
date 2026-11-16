@@ -96,20 +96,24 @@ TypeScript による堅牢な設計、コンポーネント指向、CSS Modules 
 │   │   ├── modules/           # 各コンポーネント固有の CSS Modules (*.module.css)
 │   │   ├── variables.css      # タイポグラフィ・余白・角丸・テーマデザイントークン
 │   │   └── base.css           # リセット・共通レイアウトスタイル
-│   ├── test/                  # テストスイート（規約上すべてのテストファイルは *.ts）
-│   │   ├── helpers/           # VRT 安定化処理・フック（vrt-helpers.ts）
-│   │   ├── portfolio.test.ts  # フロントエンドUI・フィルタ・日付計算単体テスト (Vitest)
-│   │   ├── worker.test.ts     # Cloudflare Worker 認証・Turnstile siteverify 単体テスト (Vitest)
-│   │   ├── vrt-desktop.spec.ts# デスクトップ表示 VRT (Playwright)
-│   │   ├── vrt-mobile.spec.ts # モバイル表示・ドロワー VRT (Playwright)
-│   │   └── vrt-print.spec.ts  # 職務経歴書・印刷表示 VRT (Playwright)
 │   ├── types/                 # TypeScript 型定義 (portfolio.ts)
 │   └── utils/                 # 純粋関数ロジック（filters.ts, date.ts）
 ├── infra/
 │   ├── worker.ts              # Cloudflare Worker エントリポイント（Basic認証, Turnstile検証, KV配信, CSP）
 │   └── sync-kv.ts             # 個人データ JSON 書き出し & Cloudflare Workers KV 同期スクリプト
-├── playwright.config.ts       # Playwright VRT 設定（testMatch: "*.spec.ts"）
-├── vite.config.ts             # Vite / Vitest 設定（test.include: ["src/test/**/*.test.ts"]）
+├── tests/                     # テストスイート（規約上すべてのテストファイルは *.ts）
+│   ├── unit/                  # 単体テスト (Vitest)
+│   │   ├── setup.ts           # Vitest セットアップ
+│   │   ├── portfolio.test.ts  # フロントエンドUI・フィルタ・日付計算単体テスト
+│   │   └── worker.test.ts     # Cloudflare Worker 認証・Turnstile siteverify 単体テスト
+│   └── vrt/                   # ビジュアルリグレッションテスト (Playwright)
+│       ├── helper.ts          # VRT 安定化処理・フック
+│       ├── desktop.spec.ts    # デスクトップ表示 VRT
+│       ├── mobile.spec.ts     # モバイル表示・ドロワー VRT
+│       ├── print.spec.ts      # 職務経歴書・印刷表示 VRT
+│       └── snapshots/         # [.gitignore] VRT スナップショット画像
+├── playwright.config.ts       # Playwright VRT 設定（testDir: "./tests/vrt", testMatch: "*.spec.ts"）
+├── vite.config.ts             # Vite / Vitest 設定（test.include: ["tests/unit/*.test.ts"]）
 └── wrangler.jsonc             # Cloudflare Workers Static Assets 設定
 ```
 
@@ -189,20 +193,20 @@ pnpm run kv:put:remote
 ## テスト戦略 (Testing Strategy)
 
 ### 1. 単体テスト (Vitest — `*.test.ts`)
-- **`src/test/portfolio.test.ts`**:
+- **`tests/unit/portfolio.test.ts`**:
   - 全案件データの整合性、スキル・案件の複合フィルタロジック
   - JST 準拠の日付計算（うるう年・月境界・タイムゾーン境界での年数/月数計算）
   - 言語切替、テーマ切替、QR モーダル開閉、Turnstile ゲート画面のトークン発行・検証遷移
-- **`src/test/worker.test.ts`**:
+- **`tests/unit/worker.test.ts`**:
   - Basic 認証の暗号検証（正常認証、不一致、欠落時の 401、未設定時のフェイルクローズ 500）
   - Turnstile `POST /api/turnstile/verify` のサーバー側 `siteverify` 検証（成功 200、不正 403、パラメータ欠落 400）
 
 ### 2. ビジュアルリグレッションテスト (Playwright — `*.spec.ts`)
 1px 単位のレイアウト崩れやスタイル抜けを自動検知するため、全 7 シナリオ（計 10 スナップショット）を保守性の高い 3 ファイル構成で管理しています。
 
-- **`vrt-desktop.spec.ts`**: デスクトップ表示（ダーク、ライト、英語、フィルタ選択/空状態、QRモーダル）
-- **`vrt-mobile.spec.ts`**: モバイルビューポート（初期表示、ハンバーガードロワー展開）
-- **`vrt-print.spec.ts`**: 職務経歴書モード画面表示 ＆ `@media print` 印刷プレビュー
+- **`tests/vrt/desktop.spec.ts`**: デスクトップ表示（ダーク、ライト、英語、フィルタ選択/空状態、QRモーダル）
+- **`tests/vrt/mobile.spec.ts`**: モバイルビューポート（初期表示、ハンバーガードロワー展開）
+- **`tests/vrt/print.spec.ts`**: 職務経歴書モード画面表示 ＆ `@media print` 印刷プレビュー
 
 #### フレーキー（Flaky）テスト防止策
 - **Web フォント遅延ロード対策**: 撮影前に画面内の全テキストに対して Google Fonts の全ウェイトを明示的にロード完了待機。

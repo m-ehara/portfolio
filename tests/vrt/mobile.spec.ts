@@ -3,7 +3,7 @@ import {
   setupVrtHooks,
   stabilizeForScreenshot,
   waitForPageReady,
-} from "./helpers/vrt-helpers"
+} from "./helper"
 
 test.describe("Portfolio Visual Regression Tests - Mobile Viewport", () => {
   test.beforeEach(async ({ page }) => {
