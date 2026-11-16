@@ -3,11 +3,11 @@ set -euo pipefail
 
 export PATH="./node_modules/.bin:${PATH}"
 
-echo "==> [1/5] Running Oxlint (src, worker & scripts)..."
-oxlint src worker scripts
+echo "==> [1/5] Running Oxlint (src & infra)..."
+oxlint src infra
 
 echo "==> [2/5] Checking code formatting with Oxfmt..."
-oxfmt --check src worker scripts
+oxfmt --check src infra
 
 echo "==> [3/5] Running TypeScript compiler check (tsc -b)..."
 tsc -b

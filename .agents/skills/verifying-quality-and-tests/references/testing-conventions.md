@@ -36,5 +36,5 @@ expect(
 
 ## 3. Oxlint / Oxfmt の設定仕様
 - **Oxlint** (`.oxlintrc.json`): `react`, `typescript`, `unicorn` プラグインを有効化し、React 19 の JSX Transform に合わせて `react/react-in-jsx-scope: "off"` を設定しています。
-- **Oxfmt** (`.oxfmtrc.json`): `src/`, `worker/`, `scripts/` を対象に、2スペースインデント・ダブルクォート・セミコロンなしで整形します。ファイル編集後は必ず `pnpm run fmt` を実行してください。
+- **Oxfmt** (`.oxfmtrc.json`): `src/`, `infra/` を対象に、2スペースインデント・ダブルクォート・セミコロンなしで整形します。ファイル編集後は必ず `pnpm run fmt` を実行してください。
   - **パーサー上の注意点**: `oxfmt@0.1.0` はアロー関数の型述語戻り値（`: value is Type`）やインラインオブジェクト型内の `;` を誤整形する場合があるため、型ガード判定には `: boolean` 戻り値を用い、オブジェクト型は `interface` 宣言として切り出してください。

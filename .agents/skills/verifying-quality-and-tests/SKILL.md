@@ -19,7 +19,7 @@ compatibility: Requires Node.js >= 20 and pnpm.
      ```bash
      bash .agents/skills/verifying-quality-and-tests/scripts/verify-all.sh
      ```
-   - `oxfmt --check` で差分が検出された場合は、`pnpm run fmt`（`oxfmt -w src worker scripts`）を実行して自動整形してください。
+   - `oxfmt --check` で差分が検出された場合は、`pnpm run fmt`（`oxfmt -w src infra`）を実行して自動整形してください。
 
 2. **テストファイル作成・編集時の `.ts` 拡張子ルール**:
    - `src/test/` 配下のテストを変更・追加する際は、事前に [references/testing-conventions.md](./references/testing-conventions.md) を確認してください。

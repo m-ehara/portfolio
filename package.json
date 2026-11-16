@@ -12,12 +12,12 @@
     "test:watch": "vitest",
     "test:ui": "playwright test",
     "test:ui:update": "playwright test --update-snapshots",
-    "lint": "oxlint src worker",
-    "fmt": "oxfmt -w src worker scripts",
-    "fmt:check": "oxfmt --check src worker scripts",
-    "kv:export": "node scripts/sync-kv.ts",
-    "kv:put:local": "node scripts/sync-kv.ts --put=local",
-    "kv:put:remote": "node scripts/sync-kv.ts --put=remote",
+    "lint": "oxlint src infra",
+    "fmt": "oxfmt -w src infra",
+    "fmt:check": "oxfmt --check src infra",
+    "kv:export": "node infra/sync-kv.ts",
+    "kv:put:local": "node infra/sync-kv.ts --put=local",
+    "kv:put:remote": "node infra/sync-kv.ts --put=remote",
     "deploy": "VITE_IGNORE_PRIVATE_DATA=true pnpm run build && pnpm exec wrangler deploy"
   },
   "dependencies": {

@@ -6,7 +6,7 @@
 クライアントリクエスト
   │
   ▼
-Cloudflare Worker (`worker/index.ts`)
+Cloudflare Worker (`infra/worker.ts`)
   ├─ 環境変数 `BASIC_AUTH_USER` / `BASIC_AUTH_PASS` が未設定か？
   │    └─> `500 Internal Server Error` を返却（誤公開防止のフェイルクローズ）
   ├─ `Authorization: Basic <base64>` ヘッダーが欠落または不一致か？
@@ -23,7 +23,7 @@ Cloudflare Worker (`worker/index.ts`)
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
-  "main": "worker/index.ts",
+  "main": "infra/worker.ts",
   "compatibility_date": "2026-06-01",
   "assets": {
     "directory": "./dist",
@@ -34,9 +34,9 @@ Cloudflare Worker (`worker/index.ts`)
 }
 ```
 
-- `binding: "ASSETS"`: `worker/index.ts` から `env.ASSETS.fetch(request)` を呼び出すためのバインディング名です。
+- `binding: "ASSETS"`: `infra/worker.ts` から `env.ASSETS.fetch(request)` を呼び出すためのバインディング名です。
 - `not_found_handling: "single-page-application"`: 認証通過後、存在しないパスへのアクセス時に `index.html` を返します。
-- `run_worker_first: true`: `/index.html` や `/assets/*` を含む全リクエストで必ず最初に `worker/index.ts` を実行させます。
+- `run_worker_first: true`: `/index.html` や `/assets/*` を含む全リクエストで必ず最初に `infra/worker.ts` を実行させます。
 
 ## 3. GitHub Actions CI/CD (`.github/workflows/deploy.yml`)
 - `main` ブランチへの `push` および `pull_request` で起動します。

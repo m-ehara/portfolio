@@ -6,7 +6,7 @@ import workerHandler, {
   verifyTurnstileToken,
   type Env,
   type PortfolioKVNamespace,
-} from "../../worker/index"
+} from "../../infra/worker"
 
 describe("Cloudflare Worker Basic Authentication", () => {
   afterEach(() => {

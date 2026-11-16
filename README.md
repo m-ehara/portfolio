@@ -105,8 +105,9 @@ TypeScript による堅牢な設計、コンポーネント指向、CSS Modules 
 │   │   └── vrt-print.spec.ts  # 職務経歴書・印刷表示 VRT (Playwright)
 │   ├── types/                 # TypeScript 型定義 (portfolio.ts)
 │   └── utils/                 # 純粋関数ロジック（filters.ts, date.ts）
-├── worker/
-│   └── index.ts               # Cloudflare Worker エントリポイント（Basic認証, Turnstile検証, CSP）
+├── infra/
+│   ├── worker.ts              # Cloudflare Worker エントリポイント（Basic認証, Turnstile検証, KV配信, CSP）
+│   └── sync-kv.ts             # 個人データ JSON 書き出し & Cloudflare Workers KV 同期スクリプト
 ├── playwright.config.ts       # Playwright VRT 設定（testMatch: "*.spec.ts"）
 ├── vite.config.ts             # Vite / Vitest 設定（test.include: ["src/test/**/*.test.ts"]）
 └── wrangler.jsonc             # Cloudflare Workers Static Assets 設定
