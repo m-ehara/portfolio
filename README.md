@@ -172,7 +172,7 @@ pnpm run kv:put:remote
    # src/data/private/{profile.ts,skills.ts,projects.ts} を自身の経歴に編集
    ```
 3. **Cloudflare Workers KV での本番配信**:
-   - 本番デプロイ時（`pnpm run deploy` / CI）は `VITE_IGNORE_PRIVATE_DATA=true` により `src/data/private/` を静的 JS バンドルから除外し、代わりに Turnstile 検証成功時（`POST /api/turnstile/verify`）および `GET /api/portfolio` 経由で Cloudflare Workers KV（`PORTFOLIO_KV`）から実データを動的配信します。
+   - 本番デプロイ時（`pnpm run deploy` / CI）は `VITE_IGNORE_PRIVATE_DATA=true` により `src/data/private/` を静的 JS バンドルから除外し、代わりに Turnstile 検証成功時（`POST /api/turnstile/verify`）のワンタイムレスポンスでのみ Cloudflare Workers KV（`PORTFOLIO_KV`）から実データを動的配信します。
    - 取得したデータはブラウザの `sessionStorage` にキャッシュされ、Worker 側もエッジキャッシュ（`cacheTtl: 3600`）を使用するため、Cloudflare KV の無料枠（10万回読み取り/日）に十分収まります。
 
 ### KV Namespace の設定と同期手順

@@ -47,5 +47,5 @@ compatibility: Requires Node.js >= 20, pnpm, and wrangler.
      ```
 
 5. **テスト検証とデプロイ**:
-   - `pnpm run test` を実行し、`tests/unit/worker.test.ts` の全ケース（未認証時 `401`、正常認証時 `200`、環境変数未設定時のフェイルクローズ `500`、KV配信API `/api/portfolio` 含む）がパスすることを確認します。
+   - `pnpm run test` を実行し、`tests/unit/worker.test.ts` の全ケース（未認証時 `401`、正常認証時 `200`、環境変数未設定時のフェイルクローズ `500`、Turnstile 検証 `/api/turnstile/verify` での KV 配信含む）がパスすることを確認します。
    - 手動デプロイは `pnpm run deploy`（自動で `VITE_IGNORE_PRIVATE_DATA=true` ビルドを実行）、自動デプロイは `main` ブランチへの push（`.github/workflows/deploy.yml`）で行います。

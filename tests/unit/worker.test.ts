@@ -322,83 +322,61 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
     expect(await res.json()).toEqual({ verified: true })
     expect(fetchSpy).toHaveBeenCalledTimes(1)
   })
-})
 
-describe("Portfolio KV API (/api/portfolio)", () => {
-  const validAuthHeader = `Basic ${btoa("admin:secret123")}`
-  const baseEnv: Env = {
-    ASSETS: {
-      fetch: vi.fn(),
-    },
-    BASIC_AUTH_USER: "admin",
-    BASIC_AUTH_PASS: "secret123",
-  }
-
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  it("returns 200 with portfolioData when PORTFOLIO_KV contains data", async () => {
-    const mockPortfolio = { handle: "sample-dev" }
-    const kvGetMock = vi.fn().mockResolvedValue(mockPortfolio)
+  it("does not read PORTFOLIO_KV or leak KV data when Basic Auth is missing or Turnstile siteverify fails", async () => {
+    const kvGetMock = vi.fn().mockResolvedValue({ secret: "private-data" })
     const envWithKv: Env = {
       ...baseEnv,
       PORTFOLIO_KV: { get: kvGetMock },
     }
 
-    const req = new Request("https://portfolio.example.com/api/portfolio", {
-      method: "GET",
-      headers: { Authorization: validAuthHeader },
-    })
+    const unauthReq = new Request(
+      "https://portfolio.example.com/api/turnstile/verify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: "valid-token" }),
+      },
+    )
+    const unauthRes = await workerHandler.fetch(unauthReq, envWithKv)
+    expect(unauthRes.status).toBe(401)
+    expect(kvGetMock).not.toHaveBeenCalled()
 
-    const res = await workerHandler.fetch(req, envWithKv)
-    expect(res.status).toBe(200)
-    expect(res.headers.get("Cache-Control")).toBe("no-store")
-    expect(await res.json()).toEqual({ portfolioData: mockPortfolio })
-    expect(kvGetMock).toHaveBeenCalledWith(PORTFOLIO_KV_KEY, {
-      type: "json",
-      cacheTtl: PORTFOLIO_KV_CACHE_TTL,
-    })
-  })
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          success: false,
+          "error-codes": ["invalid-input-response"],
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      ),
+    )
 
-  it("returns 404 when PORTFOLIO_KV is unbound or has no data", async () => {
-    const req = new Request("https://portfolio.example.com/api/portfolio", {
-      method: "GET",
-      headers: { Authorization: validAuthHeader },
-    })
-
-    const unboundRes = await workerHandler.fetch(req, baseEnv)
-    expect(unboundRes.status).toBe(404)
-
-    const emptyKvRes = await workerHandler.fetch(req, {
-      ...baseEnv,
-      PORTFOLIO_KV: { get: vi.fn().mockResolvedValue(null) },
-    })
-    expect(emptyKvRes.status).toBe(404)
-  })
-
-  it("returns 405 Method Not Allowed for non-GET requests", async () => {
-    const req = new Request("https://portfolio.example.com/api/portfolio", {
-      method: "POST",
-      headers: { Authorization: validAuthHeader },
-    })
-
-    const res = await workerHandler.fetch(req, baseEnv)
-    expect(res.status).toBe(405)
-    expect(res.headers.get("Allow")).toBe("GET")
-  })
-
-  it("blocks unauthenticated requests with 401 before checking KV", async () => {
-    const kvGetMock = vi.fn()
-    const req = new Request("https://portfolio.example.com/api/portfolio", {
-      method: "GET",
-    })
-
-    const res = await workerHandler.fetch(req, {
-      ...baseEnv,
-      PORTFOLIO_KV: { get: kvGetMock },
-    })
-    expect(res.status).toBe(401)
+    const failedVerifyReq = new Request(
+      "https://portfolio.example.com/api/turnstile/verify",
+      {
+        method: "POST",
+        headers: {
+          Authorization: validAuthHeader,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: "invalid-token" }),
+      },
+    )
+    const failedVerifyRes = await workerHandler.fetch(
+      failedVerifyReq,
+      envWithKv,
+    )
+    expect(failedVerifyRes.status).toBe(403)
+    const failedPayload = (await failedVerifyRes.json()) as {
+      verified: boolean
+      portfolioData?: unknown
+    }
+    expect(failedPayload.verified).toBe(false)
+    expect(failedPayload.portfolioData).toBeUndefined()
     expect(kvGetMock).not.toHaveBeenCalled()
   })
 })

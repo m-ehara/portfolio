@@ -445,4 +445,32 @@ describe("App component interactions", () => {
     fireEvent.click(retryBtn)
     expect(resetMock).toHaveBeenCalledWith("widget-err")
   })
+
+  it("restores cached KV portfolioData from sessionStorage on reload without calling fetch", () => {
+    const cachedData: PortfolioData = {
+      ...samplePortfolioData,
+      name: { ja: "キャッシュ済みユーザー", en: "Cached User" },
+      brandName: "Cached.User",
+      projects: [
+        {
+          ...samplePortfolioData.projects[0]!,
+          title: { ja: "キャッシュ復元案件", en: "Cached Restored Project" },
+        },
+      ],
+    }
+
+    window.sessionStorage.setItem(TURNSTILE_VERIFY_STORAGE_KEY, "true")
+    window.sessionStorage.setItem(
+      PORTFOLIO_DATA_STORAGE_KEY,
+      JSON.stringify(cachedData),
+    )
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch")
+
+    render(createElement(App))
+
+    expect(screen.getByText("キャッシュ復元案件")).toBeInTheDocument()
+    expect(screen.getByText("キャッシュ済みユーザー")).toBeInTheDocument()
+    expect(fetchSpy).not.toHaveBeenCalled()
+  })
 })

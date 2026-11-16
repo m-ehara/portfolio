@@ -27,5 +27,5 @@ compatibility: Requires Node.js >= 20 and pnpm.
 
 3. **テスト対象の網羅**:
    - フロントエンドUIおよびフィルタロジックの単体テスト（Vitest）は `tests/unit/portfolio.test.ts` に記述します。
-   - Cloudflare Worker（Basic 認証、Turnstile 検証 `/api/turnstile/verify`、および `PORTFOLIO_KV` 配信 `/api/portfolio`）の単体テスト（Vitest）は `tests/unit/worker.test.ts` に記述します。
+   - Cloudflare Worker（Basic 認証、Turnstile 検証 `/api/turnstile/verify`、および検証成功時の `PORTFOLIO_KV` 配信）の単体テスト（Vitest）は `tests/unit/worker.test.ts` に記述します。
    - ヘッドレス実ブラウザによるビジュアルリグレッションテスト（Playwright VRT: `pnpm run test:ui` / `pnpm run test:ui:update`）は `tests/vrt/*.spec.ts`（`desktop.spec.ts`, `mobile.spec.ts`, `print.spec.ts`）に記述します（出力されるスナップショット画像 `tests/vrt/snapshots/` は `.gitignore` でバージョン管理対象外）。
