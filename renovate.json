@@ -1,13 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices"
+    "group:allNonMajor",
+    "config:best-practices",
+    ":timezone(Asia/Tokyo)",
+    "schedule:weekends",
+    ":label(deps)",
+    ":pinDevDependencies"
   ],
-  "timezone": "Asia/Tokyo",
-  "labels": [
-    "dependencies"
-  ],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "14 days",
+  "major": {
+    "dependencyDashboardApproval": true
+  },
+  "nodenv": {
+    "dependencyDashboardApproval": true
+  },
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "enabled": true,
@@ -20,18 +27,19 @@
   },
   "packageRules": [
     {
-      "description": "Wait 3 days and auto-merge only patch and GitHub Actions digest updates after CI passes",
+      "description": "Auto-merge non-major updates after minimum release age and CI passes",
       "matchUpdateTypes": [
+        "minor",
         "patch",
+        "pin",
         "digest"
       ],
       "automerge": true
     },
     {
-      "description": "Require manual review for major and minor updates",
+      "description": "Require manual review for major updates",
       "matchUpdateTypes": [
-        "major",
-        "minor"
+        "major"
       ],
       "automerge": false
     }
