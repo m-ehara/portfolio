@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { Filter, MousePointerClick, Search } from "lucide-react"
 import {
-  filterSkills,
   RANK_LEGEND,
   RANK_SCORE,
   SKILL_CATEGORIES,
   UI_TEXT,
+  filterSkills,
+  matchesTech,
 } from "../data/portfolioData"
 import styles from "../styles/modules/SkillsSection.module.css"
 import type {
@@ -109,15 +110,9 @@ export const SkillsSection = ({
                 aria-label={t.minRankLabel}
               >
                 <option value="all">{t.rankAll}</option>
-                <option value="★">
-                  ★ ({locale === "ja" ? "5年以上" : "5+ yrs"})
-                </option>
-                <option value="◎">
-                  ◎ ({locale === "ja" ? "3年以上" : "3+ yrs"})
-                </option>
-                <option value="●">
-                  ● ({locale === "ja" ? "1年以上" : "1+ yr"})
-                </option>
+                <option value="★">★ ({t.rankFilter5Plus})</option>
+                <option value="◎">◎ ({t.rankFilter3Plus})</option>
+                <option value="●">● ({t.rankFilter1Plus})</option>
               </select>
             </div>
           </div>
@@ -148,8 +143,7 @@ export const SkillsSection = ({
             {filtered.map((skill) => {
               const score = RANK_SCORE[skill.rank]
               const isSelected =
-                selectedTech !== "all" &&
-                skill.name.toLowerCase().includes(selectedTech.toLowerCase())
+                selectedTech !== "all" && matchesTech(skill.name, selectedTech)
 
               return (
                 <button

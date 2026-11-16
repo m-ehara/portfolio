@@ -31,7 +31,7 @@ export const AboutSection = ({ data, locale }: AboutSectionProps) => {
     <section id="about" className="section">
       <div className="container">
         <div className="section-header">
-          <span className="section-eyebrow">{t.SpecialtiesSub}</span>
+          <span className="section-eyebrow">{t.specialtiesSub}</span>
           <h2 className="section-title">{t.specialtiesTitle}</h2>
         </div>
 

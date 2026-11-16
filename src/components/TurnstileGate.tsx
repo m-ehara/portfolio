@@ -194,7 +194,7 @@ export const TurnstileGate = ({
             className={styles.iconBtn}
             onClick={onToggleLocale}
             aria-label="Toggle Language"
-            title={locale === "ja" ? "Switch to English" : "日本語に切り替え"}
+            title={t.toggleLanguageTitle}
           >
             <Globe size={16} />
             <span className={styles.langCode}>{locale.toUpperCase()}</span>
@@ -205,7 +205,9 @@ export const TurnstileGate = ({
             className={styles.iconBtn}
             onClick={onToggleTheme}
             aria-label="Toggle Theme"
-            title={theme === "dark" ? "Light Mode" : "Dark Mode"}
+            title={
+              theme === "dark" ? t.switchToLightTitle : t.switchToDarkTitle
+            }
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>

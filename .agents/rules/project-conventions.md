@@ -8,9 +8,10 @@ description: Core architecture, tooling, and coding conventions for the my-portf
 ## 1. ツールチェーン・パッケージ管理
 - **パッケージマネージャー**: 常に `pnpm`（`pnpm install`, `pnpm run <script>`）を使用すること。`npm` や `yarn` は使用せず、`package-lock.json` や `yarn.lock` を生成・コミットしないこと。
 - **開発・プレビューサーバー**: [vite.config.ts](../../vite.config.ts) にて `host: "0.0.0.0"`, `port: 3000`, `strictPort: true` に統一している。
-- **Linter & Formatter**:
+- **Linter / Formatter / 未使用コード検出**:
   - Linter: `oxlint`（`pnpm run lint` で `src`, `infra`, `tests` を検査）
   - Formatter: `oxfmt`（`pnpm run fmt` で自動整形、`pnpm run fmt:check` で検査）
+  - 未使用コード検出: `knip`（`pnpm run knip` で `knip.json` に従い未使用ファイル・依存・エクスポート・型を検査）
   - コードスタイル: 2スペースインデント、ダブルクォート（`"`）、末尾セミコロンなし（`oxfmt` 準拠）。
   - 関数定義スタイル: コンポーネント・ユーティリティ関数・ハンドラーを含め、すべての関数は `function` 宣言ではなくラムダ式（アロー関数：`const fn = (...) => { ... }`）で統一して定義すること。
 

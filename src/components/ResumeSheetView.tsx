@@ -3,15 +3,33 @@ import {
   PROJECT_PHASES,
   RANK_LEGEND,
   UI_TEXT,
+  formatTeamSizeItems,
   formatYearMonthSlash,
 } from "../data/portfolioData"
 import styles from "../styles/modules/ResumeSheetView.module.css"
-import type { Locale, PortfolioData } from "../types/portfolio"
+import type {
+  Locale,
+  PortfolioData,
+  SkillCategoryKey,
+  SkillItem,
+} from "../types/portfolio"
 
 interface ResumeSheetViewProps {
   data: PortfolioData
   locale: Locale
   onPrint: () => void
+}
+
+interface SkillSectionGroup {
+  id: string
+  label: string
+  categories: SkillCategoryKey[]
+}
+
+interface SkillSectionConfig {
+  id: string
+  title: string
+  groups: SkillSectionGroup[]
 }
 
 export const ResumeSheetView = ({
@@ -21,13 +39,42 @@ export const ResumeSheetView = ({
 }: ResumeSheetViewProps) => {
   const t = UI_TEXT[locale]
 
-  const langSkills = data.skills.filter((s) => s.category === "language")
-  const fwSkills = data.skills.filter((s) => s.category === "framework")
-  const dbSkills = data.skills.filter((s) => s.category === "db")
-  const infraSkills = data.skills.filter((s) => s.category === "infra")
-  const osSkills = data.skills.filter((s) => s.category === "os")
-  const aiSkills = data.skills.filter((s) => s.category === "ai")
-  const otherSkills = data.skills.filter((s) => s.category === "other")
+  const skillsByCategory = new Map<SkillCategoryKey, SkillItem[]>()
+  for (const skill of data.skills) {
+    const existing = skillsByCategory.get(skill.category) ?? []
+    existing.push(skill)
+    skillsByCategory.set(skill.category, existing)
+  }
+
+  const skillSections: SkillSectionConfig[] = [
+    {
+      id: "lang-fw",
+      title: t.resumeLangFwBar,
+      groups: [
+        { id: "language", label: t.resumeLangLabel, categories: ["language"] },
+        { id: "framework", label: t.resumeFwLabel, categories: ["framework"] },
+      ],
+    },
+    {
+      id: "infra-etc",
+      title: t.resumeOtherSkillsBar,
+      groups: [
+        { id: "db", label: t.resumeDbLabel, categories: ["db"] },
+        {
+          id: "infra-os",
+          label: t.resumeInfraOsLabel,
+          categories: ["infra", "os"],
+        },
+        { id: "ai", label: t.resumeAiLabel, categories: ["ai"] },
+        { id: "other", label: t.resumeOthersLabel, categories: ["other"] },
+      ],
+    },
+  ]
+
+  const phaseGapColSpan = Math.max(
+    0,
+    data.roleExperiences.length - data.phaseExperiences.length,
+  )
 
   return (
     <div className={styles.resumeSheetWrapper}>
@@ -43,11 +90,7 @@ export const ResumeSheetView = ({
         {/* PAGE 1: Profile, PR, Career Summary, Skills Tables */}
         <div className={styles.resumeSheetPage}>
           <div className={styles.sheetHeaderRow}>
-            <h1 className={styles.sheetMainTitle}>
-              {locale === "ja"
-                ? "経歴・スキルシート"
-                : "Curriculum Vitae & Skill Sheet"}
-            </h1>
+            <h1 className={styles.sheetMainTitle}>{t.resumeSheetTitle}</h1>
             <div className={styles.sheetMetaRight}>
               <div>
                 {t.updatedAt} : {formatYearMonthSlash()}
@@ -61,15 +104,15 @@ export const ResumeSheetView = ({
           {/* 自己PR */}
           <div className={styles.sheetSection}>
             <div className={styles.sheetSectionTitle}>
-              {locale === "ja" ? "自己PR" : "Profile & Core Competencies"}
+              {t.resumeSelfPrTitle}
             </div>
             <div className={styles.sheetBoxContent}>
               <p className={styles.sheetLineBold}>
-                {locale === "ja" ? "職種：" : "Role: "}
+                {t.resumeRolePrefix}
                 {data.jobTitle[locale]}
               </p>
               <p className={`${styles.sheetLineBold} ${styles.mtXs}`}>
-                {locale === "ja" ? "得意分野：" : "Key Strengths:"}
+                {t.resumeStrengthsPrefix}
               </p>
               <ul className={styles.sheetPrList}>
                 {data.specialties.map((spec) => (
@@ -97,8 +140,7 @@ export const ResumeSheetView = ({
               {[...data.careerSummaries].reverse().map((c) => (
                 <div key={c.id} className={styles.sheetCareerItem}>
                   <div className={styles.sheetLineBold}>
-                    【{c.title[locale]}】{" "}
-                    {locale === "ja" ? "期間：" : "Period: "}
+                    【{c.title[locale]}】 {t.resumePeriodPrefix}
                     {c.period[locale]}
                   </div>
                   <p className={styles.sheetParagraph}>
@@ -147,7 +189,7 @@ export const ResumeSheetView = ({
                   {data.phaseExperiences.map((p) => (
                     <th key={p.id}>{p.label[locale]}</th>
                   ))}
-                  <th colSpan={2} />
+                  {phaseGapColSpan > 0 && <th colSpan={phaseGapColSpan} />}
                 </tr>
                 <tr>
                   {data.phaseExperiences.map((p) => (
@@ -155,124 +197,57 @@ export const ResumeSheetView = ({
                       {p.rank}
                     </td>
                   ))}
-                  <td colSpan={2} />
+                  {phaseGapColSpan > 0 && <td colSpan={phaseGapColSpan} />}
                 </tr>
               </tbody>
             </table>
           </div>
 
-          {/* 言語・FW/ライブラリ */}
-          <div className={styles.sheetSection}>
-            <div className={styles.sheetSubtitleBar}>
-              {locale === "ja"
-                ? "【言語・FW/ライブラリ】"
-                : "【Languages, Frameworks & Libraries】"}
-            </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>
-                {locale === "ja" ? "言語" : "Languages"}
-              </div>
-              <div className={styles.sheetSkillCells}>
-                {langSkills.map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
+          {/* 言語・FW/ライブラリ / DB・インフラ・OS・AI・その他 */}
+          {skillSections.map((section) => (
+            <div key={section.id} className={styles.sheetSection}>
+              <div className={styles.sheetSubtitleBar}>{section.title}</div>
+              {section.groups.map((group) => {
+                const groupSkills = group.categories.flatMap(
+                  (category) => skillsByCategory.get(category) ?? [],
+                )
+                return (
+                  <div key={group.id} className={styles.sheetSkillGroup}>
+                    <div className={styles.sheetSkillLabel}>{group.label}</div>
+                    <div className={styles.sheetSkillCells}>
+                      {groupSkills.map((s) => (
+                        <div key={s.id} className={styles.sheetSkillCell}>
+                          <div className={styles.cellHead}>{s.name}</div>
+                          <div className={styles.cellVal}>{s.rank}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
+                )
+              })}
             </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>
-                {locale === "ja" ? "FW / ライブラリ" : "FW / Libs"}
-              </div>
-              <div className={styles.sheetSkillCells}>
-                {fwSkills.map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* DB・インフラ・OS / AI / その他 */}
-          <div className={styles.sheetSection}>
-            <div className={styles.sheetSubtitleBar}>
-              {locale === "ja"
-                ? "【DB・インフラ・OS・AI・その他】"
-                : "【DB, Infra, OS, AI & Tools】"}
-            </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>DB</div>
-              <div className={styles.sheetSkillCells}>
-                {dbSkills.map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>
-                {locale === "ja" ? "インフラ / OS" : "Infra / OS"}
-              </div>
-              <div className={styles.sheetSkillCells}>
-                {[...infraSkills, ...osSkills].map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>AI</div>
-              <div className={styles.sheetSkillCells}>
-                {aiSkills.map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.sheetSkillGroup}>
-              <div className={styles.sheetSkillLabel}>
-                {locale === "ja" ? "その他" : "Others"}
-              </div>
-              <div className={styles.sheetSkillCells}>
-                {otherSkills.map((s) => (
-                  <div key={s.id} className={styles.sheetSkillCell}>
-                    <div className={styles.cellHead}>{s.name}</div>
-                    <div className={styles.cellVal}>{s.rank}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* PAGE 2: Project History Table */}
         <div className={`${styles.resumeSheetPage} ${styles.pageBreakBefore}`}>
           <div className={styles.sheetSubtitleBar}>
-            {locale === "ja"
-              ? `【業務経歴詳細（全${data.projects.length}案件）】`
-              : `【Detailed Project History (${data.projects.length} Projects)】`}
+            {t.resumeProjectsBarPrefix}
+            {data.projects.length}
+            {t.resumeProjectsBarSuffix}
           </div>
           <div className={styles.sheetTableScroll}>
             <table className={styles.sheetProjectsTable}>
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>{locale === "ja" ? "期間" : "Period"}</th>
-                  <th>{locale === "ja" ? "業務内容" : "Project Details"}</th>
-                  <th>{locale === "ja" ? "役割・規模" : "Role / Scale"}</th>
-                  <th>{locale === "ja" ? "使用言語" : "Languages"}</th>
-                  <th>DB / OS</th>
-                  <th>{locale === "ja" ? "FW・MW・ツール等" : "FW / Tools"}</th>
-                  <th>{locale === "ja" ? "担当工程" : "Phases"}</th>
+                  <th>{t.resumeColNo}</th>
+                  <th>{t.resumeColPeriod}</th>
+                  <th>{t.resumeColDetails}</th>
+                  <th>{t.resumeColRoleScale}</th>
+                  <th>{t.resumeColLanguages}</th>
+                  <th>{t.resumeColDbOs}</th>
+                  <th>{t.resumeColFwTools}</th>
+                  <th>{t.resumeColPhases}</th>
                 </tr>
               </thead>
               <tbody>
@@ -319,25 +294,20 @@ export const ResumeSheetView = ({
                       <div className={styles.fontBold}>
                         {p.roles.join(", ")}
                       </div>
-                      <div className={`${styles.subMuted} ${styles.mtXs}`}>
-                        {p.teamSize.team
-                          ? `${t.teamLabel} ${p.teamSize.team}${t.teamUnit}`
-                          : ""}
-                      </div>
-                      <div className={styles.subMuted}>
-                        {p.teamSize.dev
-                          ? `${t.devLabel} ${p.teamSize.dev}${t.teamUnit}`
-                          : ""}
-                      </div>
-                      <div className={styles.subMuted}>
-                        {p.teamSize.maintenance
-                          ? `${t.maintLabel} ${p.teamSize.maintenance}${t.teamUnit}`
-                          : ""}
-                      </div>
-                      <div className={styles.subMuted}>
-                        {t.totalLabel} {p.teamSize.total}
-                        {t.teamUnit}
-                      </div>
+                      {formatTeamSizeItems(p.teamSize, locale).map(
+                        (item, idx) => (
+                          <div
+                            key={item}
+                            className={
+                              idx === 0
+                                ? `${styles.subMuted} ${styles.mtXs}`
+                                : styles.subMuted
+                            }
+                          >
+                            {item}
+                          </div>
+                        ),
+                      )}
                     </td>
                     <td>
                       {p.languages.map((l) => (

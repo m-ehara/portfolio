@@ -32,7 +32,6 @@ export interface SkillItem {
   category: SkillCategoryKey
   rank: SkillRank
   yearsLabel: LocalizedText
-  highlight?: boolean
 }
 
 export interface RoleExperience {

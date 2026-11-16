@@ -1,13 +1,5 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv {
-  readonlyVITE_TURNSTILE_SITE_KEY?: string
-}
-
-interface ImportMeta {
-  readonlyenv: ImportMetaEnv
-}
-
 export interface TurnstileRenderOptions {
   sitekey: string
   theme?: "dark" | "light" | "auto"
@@ -17,7 +9,7 @@ export interface TurnstileRenderOptions {
   "expired-callback"?: () => void
 }
 
-export interface TurnstileInstance {
+interface TurnstileInstance {
   render: (
     container: string | HTMLElement,
     options: TurnstileRenderOptions,
@@ -27,6 +19,10 @@ export interface TurnstileInstance {
 }
 
 declare global {
+  interface ImportMetaEnv {
+    VITE_TURNSTILE_SITE_KEY?: string
+  }
+
   interface Window {
     turnstile?: TurnstileInstance
   }

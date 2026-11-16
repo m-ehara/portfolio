@@ -8,7 +8,12 @@ import {
   Search,
   Users,
 } from "lucide-react"
-import { filterProjects, PROJECT_PHASES, UI_TEXT } from "../data/portfolioData"
+import {
+  PROJECT_PHASES,
+  UI_TEXT,
+  filterProjects,
+  formatTeamSizeItems,
+} from "../data/portfolioData"
 import styles from "../styles/modules/ProjectsSection.module.css"
 import type { Locale, ProjectItem } from "../types/portfolio"
 
@@ -40,6 +45,7 @@ export const ProjectsSection = ({
     for (const p of projects) {
       for (const lang of p.languages) set.add(lang)
       for (const db of p.databases) set.add(db)
+      for (const os of p.serverOs) set.add(os)
       for (const fw of p.frameworksAndTools) set.add(fw)
     }
     return Array.from(set).sort()
@@ -51,9 +57,8 @@ export const ProjectsSection = ({
         role: roleFilter,
         tech: selectedTech,
         query,
-        locale,
       }),
-    [projects, roleFilter, selectedTech, query, locale],
+    [projects, roleFilter, selectedTech, query],
   )
 
   const hasActiveFilters =
@@ -65,10 +70,7 @@ export const ProjectsSection = ({
     setQuery("")
   }
 
-  const sectionTitle =
-    locale === "ja"
-      ? `プロジェクト実績（${projects.length}件）`
-      : `Project Track Record (${projects.length})`
+  const sectionTitle = `${t.projectsTitlePrefix}${projects.length}${t.projectsTitleSuffix}`
 
   return (
     <section id="projects" className="section">
@@ -119,6 +121,10 @@ export const ProjectsSection = ({
               aria-label={t.techFilterLabel}
             >
               <option value="all">{t.allTechs}</option>
+              {selectedTech !== "all" &&
+                !allTechOptions.includes(selectedTech) && (
+                  <option value={selectedTech}>{selectedTech}</option>
+                )}
               {allTechOptions.map((tech) => (
                 <option key={tech} value={tech}>
                   {tech}
@@ -196,17 +202,9 @@ export const ProjectsSection = ({
                     <div className={styles.teamSizeBadge}>
                       <Users size={14} />
                       <span>
-                        {project.teamSize.team
-                          ? `${t.teamLabel} ${project.teamSize.team}${t.teamUnit} / `
-                          : ""}
-                        {project.teamSize.dev
-                          ? `${t.devLabel} ${project.teamSize.dev}${t.teamUnit} / `
-                          : ""}
-                        {project.teamSize.maintenance
-                          ? `${t.maintLabel} ${project.teamSize.maintenance}${t.teamUnit} / `
-                          : ""}
-                        {t.totalLabel} {project.teamSize.total}
-                        {t.teamUnit}
+                        {formatTeamSizeItems(project.teamSize, locale).join(
+                          " / ",
+                        )}
                       </span>
                     </div>
                   </div>
@@ -238,46 +236,23 @@ export const ProjectsSection = ({
                 <div className={styles.projectTechRow}>
                   <span className={styles.rowLabel}>{t.techStackLabel}:</span>
                   <div className={styles.projectTechTags}>
-                    {project.languages.map((lang) => (
-                      <button
-                        key={`lang-${lang}`}
-                        type="button"
-                        className={styles.techTag}
-                        onClick={() => onSelectTech(lang)}
-                      >
-                        {lang}
-                      </button>
-                    ))}
-                    {project.databases.map((db) => (
-                      <button
-                        key={`db-${db}`}
-                        type="button"
-                        className={styles.techTag}
-                        onClick={() => onSelectTech(db)}
-                      >
-                        {db}
-                      </button>
-                    ))}
-                    {project.serverOs.map((os) => (
-                      <button
-                        key={`os-${os}`}
-                        type="button"
-                        className={styles.techTag}
-                        onClick={() => onSelectTech(os)}
-                      >
-                        {os}
-                      </button>
-                    ))}
-                    {project.frameworksAndTools.map((fw) => (
-                      <button
-                        key={`fw-${fw}`}
-                        type="button"
-                        className={styles.techTag}
-                        onClick={() => onSelectTech(fw)}
-                      >
-                        {fw}
-                      </button>
-                    ))}
+                    {[
+                      { prefix: "lang", items: project.languages },
+                      { prefix: "db", items: project.databases },
+                      { prefix: "os", items: project.serverOs },
+                      { prefix: "fw", items: project.frameworksAndTools },
+                    ].flatMap(({ prefix, items }) =>
+                      items.map((tech) => (
+                        <button
+                          key={`${prefix}-${tech}`}
+                          type="button"
+                          className={styles.techTag}
+                          onClick={() => onSelectTech(tech)}
+                        >
+                          {tech}
+                        </button>
+                      )),
+                    )}
                   </div>
                 </div>
 

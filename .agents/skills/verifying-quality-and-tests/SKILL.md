@@ -15,7 +15,7 @@ compatibility: Requires Node.js >= 20 and pnpm.
 ## 実行ステップ
 
 1. **一括検証スクリプトの実行**:
-   - コード変更後の検証は、個別コマンドを手動で組み立てる代わりに [scripts/verify-all.sh](./scripts/verify-all.sh) を実行してください（Oxlint → Oxfmt → `tsc -b` → Vitest → Vite Build を順次検証します）：
+   - コード変更後の検証は、個別コマンドを手動で組み立てる代わりに [scripts/verify-all.sh](./scripts/verify-all.sh) を実行してください（Oxlint → Oxfmt → Knip → `tsc -b` → Vitest → Vite Build を順次検証します）：
      ```bash
      bash .agents/skills/verifying-quality-and-tests/scripts/verify-all.sh
      ```

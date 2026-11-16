@@ -33,8 +33,6 @@ const resolvedProjects = privateProjects?.projectsData
 const resolvedSkills = privateSkills?.skillsData ? privateSkills : sampleSkills
 
 export {
-  DEFAULT_PORTFOLIO_QR_SVG_PATH,
-  DEFAULT_PORTFOLIO_URL,
   PORTFOLIO_DATA_STORAGE_KEY,
   PROJECT_PHASES,
   RANK_LEGEND,
@@ -45,23 +43,15 @@ export {
   TURNSTILE_VERIFY_STORAGE_KEY,
 } from "./constants"
 export { UI_TEXT } from "./i18n"
-export {
-  filterProjects,
-  filterSkills,
-  type FilterProjectsOptions,
-  type FilterSkillsOptions,
-} from "../utils/filters"
+export { filterProjects, filterSkills, matchesTech } from "../utils/filters"
+export { formatTeamSizeItems } from "../utils/formatters"
 export {
   buildProjectPeriod,
   calculateDurationMonths,
   calculateElapsedYears,
   formatDurationLabel,
   formatElapsedYearsLabel,
-  formatPeriodRange,
   formatYearMonthSlash,
-  getCurrentYearMonth,
-  type TimeReference,
-  type YearMonth,
 } from "../utils/date"
 
 export const samplePortfolioData: PortfolioData = {
@@ -84,28 +74,25 @@ export const portfolioData: PortfolioData = {
   projects: resolvedProjects.projectsData,
 }
 
-export const PORTFOLIO_URL = portfolioData.portfolioUrl
-export const PORTFOLIO_QR_SVG_PATH = portfolioData.portfolioQrSvgPath
 export const CAREER_START = portfolioData.careerStart
 export const FREELANCE_START = portfolioData.freelanceStart
 
-const isRecord = (value: unknown): boolean =>
-  typeof value === "object" && value !== null
+const asRecord = (value: unknown): Record<string, unknown> | null =>
+  typeof value === "object" && value !== null && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null
 
 const isLocalizedText = (value: unknown): boolean => {
-  if (!isRecord(value)) {
-    return false
-  }
-  const obj = value as Record<string, unknown>
-  return typeof obj.ja === "string" && typeof obj.en === "string"
+  const obj = asRecord(value)
+  return (
+    obj !== null && typeof obj.ja === "string" && typeof obj.en === "string"
+  )
 }
 
 const isYearMonth = (value: unknown): boolean => {
-  if (!isRecord(value)) {
-    return false
-  }
-  const obj = value as Record<string, unknown>
+  const obj = asRecord(value)
   return (
+    obj !== null &&
     typeof obj.year === "number" &&
     Number.isFinite(obj.year) &&
     typeof obj.month === "number" &&
@@ -113,11 +100,11 @@ const isYearMonth = (value: unknown): boolean => {
   )
 }
 
-export const isValidPortfolioData = (value: unknown): boolean => {
-  if (!isRecord(value)) {
+const isValidPortfolioData = (value: unknown): boolean => {
+  const obj = asRecord(value)
+  if (!obj) {
     return false
   }
-  const obj = value as Record<string, unknown>
 
   return (
     typeof obj.updatedAt === "string" &&

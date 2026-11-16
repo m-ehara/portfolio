@@ -48,14 +48,12 @@ export const HeroSection = ({
   )[locale]
   const careerStartStr = formatStartYearMonth(data.careerStart)
   const freelanceStartStr = formatStartYearMonth(data.freelanceStart)
-  const projectsCountValue =
-    locale === "ja" ? `${data.projects.length}件` : `${data.projects.length}`
+  const projectsCountValue = `${data.projects.length}${t.projectsCountUnit}`
   const maxTeamTotal = data.projects.reduce(
     (max, project) => Math.max(max, project.teamSize.total),
     0,
   )
-  const maxTeamSizeValue =
-    locale === "ja" ? `${maxTeamTotal}名` : `${maxTeamTotal} members`
+  const maxTeamSizeValue = `${maxTeamTotal}${t.maxTeamUnit}`
 
   return (
     <section id="top" className={styles.heroSection}>
@@ -108,9 +106,8 @@ export const HeroSection = ({
             <div>
               <div className={styles.metricValue}>{totalYearsValue}</div>
               <div className={styles.metricLabel}>
-                {t.yearsTotal} (
-                {locale === "ja" ? `${careerStartStr}〜` : `${careerStartStr}–`}
-                )
+                {t.yearsTotal} ({careerStartStr}
+                {t.periodOngoingSuffix})
               </div>
             </div>
           </div>
@@ -122,11 +119,8 @@ export const HeroSection = ({
             <div>
               <div className={styles.metricValue}>{freelanceYearsValue}</div>
               <div className={styles.metricLabel}>
-                {t.freelanceYears} (
-                {locale === "ja"
-                  ? `${freelanceStartStr}〜`
-                  : `${freelanceStartStr}–`}
-                )
+                {t.freelanceYears} ({freelanceStartStr}
+                {t.periodOngoingSuffix})
               </div>
             </div>
           </div>

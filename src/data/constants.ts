@@ -12,33 +12,28 @@ export const RANK_LEGEND: Array<{
   rank: SkillRank
   ja: string
   en: string
-  badgeColor: string
 }> = [
   {
     rank: "★",
     ja: "業務経験5年以上",
     en: "5+ yrs experience",
-    badgeColor: "rank-5",
   },
   {
     rank: "◎",
     ja: "業務経験3年以上",
     en: "3+ yrs experience",
-    badgeColor: "rank-4",
   },
   {
     rank: "●",
     ja: "業務経験1年以上",
     en: "1+ yr experience",
-    badgeColor: "rank-3",
   },
   {
     rank: "○",
     ja: "業務経験あり",
     en: "Practical experience",
-    badgeColor: "rank-2",
   },
-  { rank: "△", ja: "知識あり", en: "Knowledge", badgeColor: "rank-1" },
+  { rank: "△", ja: "知識あり", en: "Knowledge" },
 ]
 
 export const SKILL_CATEGORIES: Array<{
