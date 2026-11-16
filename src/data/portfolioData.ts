@@ -32,28 +32,6 @@ const resolvedProjects = privateProjects?.projectsData
   : sampleProjects
 const resolvedSkills = privateSkills?.skillsData ? privateSkills : sampleSkills
 
-export {
-  PORTFOLIO_DATA_STORAGE_KEY,
-  PROJECT_PHASES,
-  RANK_LEGEND,
-  RANK_SCORE,
-  SKILL_CATEGORIES,
-  TURNSTILE_DUMMY_SITE_KEY,
-  TURNSTILE_SCRIPT_URL,
-  TURNSTILE_VERIFY_STORAGE_KEY,
-} from "./constants"
-export { UI_TEXT } from "./i18n"
-export { filterProjects, filterSkills, matchesTech } from "../utils/filters"
-export { formatTeamSizeItems } from "../utils/formatters"
-export {
-  buildProjectPeriod,
-  calculateDurationMonths,
-  calculateElapsedYears,
-  formatDurationLabel,
-  formatElapsedYearsLabel,
-  formatYearMonthSlash,
-} from "../utils/date"
-
 export const samplePortfolioData: PortfolioData = {
   ...sampleProfile.profileInfo,
   specialties: sampleProfile.specialtiesData,
@@ -73,9 +51,6 @@ export const portfolioData: PortfolioData = {
   skills: resolvedSkills.skillsData,
   projects: resolvedProjects.projectsData,
 }
-
-export const CAREER_START = portfolioData.careerStart
-export const FREELANCE_START = portfolioData.freelanceStart
 
 const asRecord = (value: unknown): Record<string, unknown> | null =>
   typeof value === "object" && value !== null && !Array.isArray(value)

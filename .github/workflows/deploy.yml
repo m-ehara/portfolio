@@ -104,18 +104,14 @@ jobs:
         env:
           KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
         run: |
-          node -e '
-            const kvId = (process.env.KV_NAMESPACE_ID || "").trim();
-            if (!kvId) {
-              console.log("CLOUDFLARE_KV_NAMESPACE_ID secret is not set; skipping PORTFOLIO_KV binding injection.");
-              process.exit(0);
-            }
-            const fs = require("node:fs");
-            const raw = fs.readFileSync("wrangler.jsonc", "utf8");
-            const cfg = JSON.parse(raw);
-            cfg.kv_namespaces = [{ binding: "PORTFOLIO_KV", id: kvId }];
-            fs.writeFileSync("wrangler.jsonc", JSON.stringify(cfg, null, 2) + "\n");
-          '
+          if [ -z "$KV_NAMESPACE_ID" ]; then
+            echo "::notice::CLOUDFLARE_KV_NAMESPACE_ID is not set; skipping PORTFOLIO_KV binding."
+            exit 0
+          fi
+          jq --arg id "$KV_NAMESPACE_ID" \
+            '.kv_namespaces = [{ binding: "PORTFOLIO_KV", id: $id }]' \
+            wrangler.jsonc > wrangler.jsonc.tmp
+          mv wrangler.jsonc.tmp wrangler.jsonc
 
       - name: Deploy with Wrangler
         if: steps.cf_creds.outputs.has_creds == 'true'

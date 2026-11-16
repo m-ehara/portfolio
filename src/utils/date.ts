@@ -1,7 +1,5 @@
 import type { LocalizedText, ProjectItem, YearMonth } from "../types/portfolio"
 
-export type { YearMonth }
-
 export type TimeReference = YearMonth | number | Date
 
 const EN_MONTH_NAMES = [

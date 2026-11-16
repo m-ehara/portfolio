@@ -11,7 +11,8 @@ import {
   Terminal,
   X,
 } from "lucide-react"
-import { UI_TEXT, portfolioData } from "../data/portfolioData"
+import { UI_TEXT } from "../data/i18n"
+import { portfolioData } from "../data/portfolioData"
 import styles from "../styles/modules/Header.module.css"
 import type {
   Locale,

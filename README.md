@@ -155,9 +155,7 @@ pnpm run build
 # ビルド成果物のローカルプレビュー
 pnpm run preview
 
-# 個人データ JSON の書き出し & Cloudflare Workers KV 同期
-pnpm run kv:export
-pnpm run kv:put:local
+# Cloudflare Workers KV（本番）への個人データ同期
 pnpm run kv:put:remote
 ```
 
@@ -176,18 +174,18 @@ pnpm run kv:put:remote
    # src/data/private/{profile.ts,skills.ts,projects.ts} を自身の経歴に編集
    ```
 3. **Cloudflare Workers KV での本番配信**:
-   - 本番デプロイ時（`pnpm run deploy` / CI）は `VITE_IGNORE_PRIVATE_DATA=true` により `src/data/private/` を静的 JS バンドルから除外し、代わりに Turnstile 検証成功時（`POST /api/turnstile/verify`）のワンタイムレスポンスでのみ Cloudflare Workers KV（`PORTFOLIO_KV`）から実データを動的配信します。
+   - 本番デプロイ（GitHub Actions 経由の自動 CI/CD）では `VITE_IGNORE_PRIVATE_DATA=true` により `src/data/private/` を静的 JS バンドルから除外し、代わりに Turnstile 検証成功時（`POST /api/turnstile/verify`）のワンタイムレスポンスでのみ Cloudflare Workers KV（`PORTFOLIO_KV`）から実データを動的配信します。
    - 取得したデータはブラウザの `sessionStorage` にキャッシュされ、Worker 側もエッジキャッシュ（`cacheTtl: 3600`）を使用するため、Cloudflare KV の無料枠（10万回読み取り/日）に十分収まります。
 
 ### KV Namespace の設定と同期手順
-`wrangler.jsonc` にアカウント固有の Namespace ID をハードコードせず、`.dev.vars` および GitHub Actions Secrets 経由で管理します。
+`wrangler.jsonc` にはアカウント固有の Namespace ID をハードコードせず、`.dev.vars` および GitHub Actions Secrets 経由で管理します。
 
 1. Cloudflare KV Namespace を作成し、出力された `id` を控えます：
    ```bash
    pnpm exec wrangler kv namespace create PORTFOLIO_KV
    ```
-2. `.dev.vars`（`.gitignore` 対象）に `CLOUDFLARE_KV_NAMESPACE_ID=<YOUR_KV_NAMESPACE_ID>` を設定し、GitHub Actions Secrets にも `CLOUDFLARE_KV_NAMESPACE_ID` を登録します（CI デプロイ時に `wrangler.jsonc` へ自動注入されます）。
-3. 手元の `src/data/private/` を JSON 化して KV へアップロードします：
+2. `.dev.vars`（`.gitignore` 対象）に `CLOUDFLARE_KV_NAMESPACE_ID=<YOUR_KV_NAMESPACE_ID>` を設定し、GitHub Actions Secrets にも `CLOUDFLARE_KV_NAMESPACE_ID` を登録します（CI デプロイ時に `wrangler.jsonc` へ一時注入されます）。
+3. 手元の `src/data/private/` を JSON 化して本番 KV へアップロードします：
    ```bash
    pnpm run kv:put:remote
    ```
@@ -233,7 +231,8 @@ pnpm exec wrangler dev --port 3000
 
 > **Note**: `TURNSTILE_SECRET_KEY` 未設定時のダミーキーフォールバックはローカルホスト（`localhost` / `127.0.0.1` / `[::1]`）に限定されており、本番ドメインでは安全のため `500`（フェイルクローズ）となります。
 
-### 2. GitHub Actions による自動 CI/CD（推奨）
+### 2. GitHub Actions による自動 CI/CD（デプロイ基本方針）
+誤設定やビルド状態不備での公開を防ぐため、Cloudflare Workers へのデプロイはローカルから直接実行せず、**GitHub Actions（`.github/workflows/deploy.yml`）経由での実行を基本方針**としています。
 `main` ブランチへの push 時に、自動で **Lint → Format チェック → Knip チェック → 単体テスト → ビルド（`VITE_IGNORE_PRIVATE_DATA=true`） → Cloudflare Workers デプロイ** が実行されます。`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` が未設定のフォーク環境等ではデプロイステップは安全にスキップされます。
 
 GitHub リポジトリの `Settings > Secrets and variables > Actions` に以下のシークレットを設定してください：

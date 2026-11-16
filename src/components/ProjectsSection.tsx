@@ -8,12 +8,10 @@ import {
   Search,
   Users,
 } from "lucide-react"
-import {
-  PROJECT_PHASES,
-  UI_TEXT,
-  filterProjects,
-  formatTeamSizeItems,
-} from "../data/portfolioData"
+import { PROJECT_PHASES } from "../data/constants"
+import { UI_TEXT } from "../data/i18n"
+import { filterProjects } from "../utils/filters"
+import { formatTeamSizeItems } from "../utils/formatters"
 import styles from "../styles/modules/ProjectsSection.module.css"
 import type { Locale, ProjectItem } from "../types/portfolio"
 

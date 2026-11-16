@@ -1,11 +1,8 @@
 import { Printer } from "lucide-react"
-import {
-  PROJECT_PHASES,
-  RANK_LEGEND,
-  UI_TEXT,
-  formatTeamSizeItems,
-  formatYearMonthSlash,
-} from "../data/portfolioData"
+import { PROJECT_PHASES, RANK_LEGEND } from "../data/constants"
+import { UI_TEXT } from "../data/i18n"
+import { formatYearMonthSlash } from "../utils/date"
+import { formatTeamSizeItems } from "../utils/formatters"
 import styles from "../styles/modules/ResumeSheetView.module.css"
 import type {
   Locale,

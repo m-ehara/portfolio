@@ -10,24 +10,33 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest"
 import App from "../../src/App"
 import { Footer } from "../../src/components/Footer"
+import { SkillsSection } from "../../src/components/SkillsSection"
 import {
-  CAREER_START,
-  FREELANCE_START,
   PORTFOLIO_DATA_STORAGE_KEY,
   TURNSTILE_VERIFY_STORAGE_KEY,
-  buildProjectPeriod,
-  calculateDurationMonths,
-  calculateElapsedYears,
-  filterProjects,
-  filterSkills,
-  formatDurationLabel,
-  formatElapsedYearsLabel,
-  formatYearMonthSlash,
-  matchesTech,
+} from "../../src/data/constants"
+import {
   portfolioData,
   samplePortfolioData,
 } from "../../src/data/portfolioData"
-import type { PortfolioData, ProjectItem } from "../../src/types/portfolio"
+import {
+  buildProjectPeriod,
+  calculateDurationMonths,
+  calculateElapsedYears,
+  formatDurationLabel,
+  formatElapsedYearsLabel,
+  formatYearMonthSlash,
+} from "../../src/utils/date"
+import {
+  filterProjects,
+  filterSkills,
+  matchesTech,
+} from "../../src/utils/filters"
+import type {
+  PortfolioData,
+  ProjectItem,
+  SkillItem,
+} from "../../src/types/portfolio"
 import type { TurnstileRenderOptions } from "../../src/vite-env"
 
 describe("portfolioData & filter utilities", () => {
@@ -161,9 +170,13 @@ describe("portfolioData & filter utilities", () => {
       6,
     )
 
-    // Verify exported CAREER_START / FREELANCE_START align with portfolioData
-    expect(CAREER_START).toEqual(portfolioData.careerStart)
-    expect(FREELANCE_START).toEqual(portfolioData.freelanceStart)
+    // Verify portfolioData careerStart / freelanceStart have valid YearMonth structure
+    expect(portfolioData.careerStart.year).toBeGreaterThanOrEqual(2000)
+    expect(portfolioData.careerStart.month).toBeGreaterThanOrEqual(1)
+    expect(portfolioData.careerStart.month).toBeLessThanOrEqual(12)
+    expect(portfolioData.freelanceStart.year).toBeGreaterThanOrEqual(2000)
+    expect(portfolioData.freelanceStart.month).toBeGreaterThanOrEqual(1)
+    expect(portfolioData.freelanceStart.month).toBeLessThanOrEqual(12)
 
     // Project period & inclusive month calculation
     const completed = buildProjectPeriod({ year: 2025, month: 2 }, {
@@ -560,7 +573,7 @@ describe("App component interactions", () => {
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
-  it("toggles skill selection without scrolling on deselection and supports reverse matching", () => {
+  it("toggles skill selection strictly without scrolling on deselection and switches between prefix-overlapping skills", () => {
     render(createElement(App))
 
     const skillsSection = document.getElementById("skills")
@@ -591,17 +604,70 @@ describe("App component interactions", () => {
     expect(tsSkillBtn.className).not.toContain("skillSelected")
     expect(scrollIntoViewMock).toHaveBeenCalledTimes(1)
 
-    // Select "Amazon Linux" -> highlights "Linux" skill via reverse match, and clicking "Linux" clears filter
+    // Select "Amazon Linux" -> does NOT partially highlight "Linux", and clicking "Linux" switches filter to "Linux"
     fireEvent.change(techSelect, { target: { value: "Amazon Linux" } })
     const linuxSkillBtn = within(skillsSection!).getByRole("button", {
       name: /^Linux\b/i,
     })
-    expect(linuxSkillBtn.className).toContain("skillSelected")
+    expect(linuxSkillBtn.className).not.toContain("skillSelected")
 
     fireEvent.click(linuxSkillBtn)
-    expect(techSelect.value).toBe("all")
-    expect(linuxSkillBtn.className).not.toContain("skillSelected")
-    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1)
+    expect(techSelect.value).toBe("Linux")
+    expect(linuxSkillBtn.className).toContain("skillSelected")
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(2)
+
+    // Strict selection with prefix-overlapping skills ("Windows" vs "Windows Server")
+    const overlappingSkills: SkillItem[] = [
+      {
+        id: "windows",
+        name: "Windows",
+        category: "os",
+        rank: "★",
+        yearsLabel: { ja: "5年以上", en: "5+ yrs" },
+      },
+      {
+        id: "winserver",
+        name: "Windows Server",
+        category: "infra",
+        rank: "●",
+        yearsLabel: { ja: "1年以上", en: "1+ yr" },
+      },
+    ]
+    const onSelectTech = vi.fn()
+    const { container, rerender } = render(
+      createElement(SkillsSection, {
+        skills: overlappingSkills,
+        locale: "ja",
+        selectedTech: "Windows",
+        onSelectTech,
+      }),
+    )
+
+    const isolatedSkills = within(container)
+    const winBtn = isolatedSkills.getByRole("button", { name: /^Windows\b ★/i })
+    const winServerBtn = isolatedSkills.getByRole("button", {
+      name: /^Windows Server\b/i,
+    })
+
+    expect(winBtn.className).toContain("skillSelected")
+    expect(winServerBtn.className).not.toContain("skillSelected")
+
+    fireEvent.click(winServerBtn)
+    expect(onSelectTech).toHaveBeenCalledWith("Windows Server")
+
+    fireEvent.click(winBtn)
+    expect(onSelectTech).toHaveBeenCalledWith("all")
+
+    rerender(
+      createElement(SkillsSection, {
+        skills: overlappingSkills,
+        locale: "ja",
+        selectedTech: "Windows Server",
+        onSelectTech,
+      }),
+    )
+    expect(winBtn.className).not.toContain("skillSelected")
+    expect(winServerBtn.className).toContain("skillSelected")
   })
 
   it("does not show copied state in QrCodeModal when both clipboard API and execCommand fail", async () => {

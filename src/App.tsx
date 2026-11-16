@@ -10,10 +10,8 @@ import { TurnstileGate } from "./components/TurnstileGate"
 import {
   PORTFOLIO_DATA_STORAGE_KEY,
   TURNSTILE_VERIFY_STORAGE_KEY,
-  matchesTech,
-  parsePortfolioData,
-  portfolioData,
-} from "./data/portfolioData"
+} from "./data/constants"
+import { parsePortfolioData, portfolioData } from "./data/portfolioData"
 import type {
   Locale,
   PortfolioData,
@@ -102,10 +100,7 @@ const App = () => {
   }, [])
 
   const handleSelectTech = (tech: string) => {
-    const isDeselecting =
-      tech === "all" ||
-      (selectedTech !== "all" &&
-        (selectedTech === tech || matchesTech(tech, selectedTech)))
+    const isDeselecting = tech === "all" || selectedTech === tech
     const nextTech = isDeselecting ? "all" : tech
     setSelectedTech(nextTech)
     if (nextTech !== "all") {
