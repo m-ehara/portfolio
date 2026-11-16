@@ -3,8 +3,8 @@ import { existsSync, readFileSync } from "node:fs"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { createServer } from "vite"
+import { PORTFOLIO_KV_KEY } from "./worker.ts"
 
-const PORTFOLIO_KV_KEY = "portfolio_data"
 const OUTPUT_RELATIVE_PATH = ".wrangler/tmp/portfolio-data.json"
 
 type PutMode = "local" | "remote" | null

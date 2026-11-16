@@ -16,10 +16,11 @@ import {
   formatDurationLabel,
   formatElapsedYearsLabel,
   formatYearMonthSlash,
+  matchesTech,
   portfolioData,
   samplePortfolioData,
 } from "../../src/data/portfolioData"
-import type { PortfolioData } from "../../src/types/portfolio"
+import type { PortfolioData, ProjectItem } from "../../src/types/portfolio"
 import type { TurnstileRenderOptions } from "../../src/vite-env"
 
 describe("portfolioData & filter utilities", () => {
@@ -67,6 +68,59 @@ describe("portfolioData & filter utilities", () => {
     })
     expect(goProjects).toHaveLength(1)
     expect(goProjects[0]?.id).toBe(2)
+  })
+
+  it("matches technologies by token boundary and normalization without false positives", () => {
+    expect(matchesTech("JavaScript", "Java")).toBe(false)
+    expect(matchesTech("Java", "JavaScript")).toBe(false)
+    expect(matchesTech("MongoDB", "Go")).toBe(false)
+    expect(matchesTech("Google Apps (G Suite)", "Go")).toBe(false)
+    expect(matchesTech("SCSS", "CSS")).toBe(false)
+    expect(matchesTech("Vitest", "Vite")).toBe(false)
+
+    expect(matchesTech("React.js", "React")).toBe(true)
+    expect(matchesTech("HTML5", "HTML")).toBe(true)
+    expect(matchesTech("CSS3", "CSS")).toBe(true)
+    expect(matchesTech("Amazon Linux", "Linux")).toBe(true)
+    expect(matchesTech("AWS ECS", "AWS")).toBe(true)
+    expect(matchesTech("Windows Server 2008", "Windows Server")).toBe(true)
+    expect(matchesTech("GitHub", "Git / GitHub")).toBe(true)
+    expect(matchesTech("Git(Backlog)", "Git / GitHub")).toBe(true)
+
+    const baseProject = samplePortfolioData.projects[0]!
+    const syntheticProjects: ProjectItem[] = [
+      {
+        ...baseProject,
+        id: 101,
+        languages: ["JavaScript"],
+        databases: ["MongoDB"],
+        serverOs: ["Amazon Linux"],
+        frameworksAndTools: ["React.js"],
+      },
+      {
+        ...baseProject,
+        id: 102,
+        languages: ["Java", "Go"],
+        databases: ["PostgreSQL"],
+        serverOs: ["Windows Server 2008"],
+        frameworksAndTools: ["Google Apps (G Suite)"],
+      },
+    ]
+
+    expect(
+      filterProjects(syntheticProjects, { tech: "Java" }).map((p) => p.id),
+    ).toEqual([102])
+    expect(
+      filterProjects(syntheticProjects, { tech: "Go" }).map((p) => p.id),
+    ).toEqual([102])
+    expect(
+      filterProjects(syntheticProjects, { tech: "React" }).map((p) => p.id),
+    ).toEqual([101])
+    expect(
+      filterProjects(syntheticProjects, { tech: "Amazon Linux" }).map(
+        (p) => p.id,
+      ),
+    ).toEqual([101])
   })
 
   it("calculates dynamic dates, elapsed years, and project durations accurately across boundary months and JST timezone", () => {
@@ -299,6 +353,31 @@ describe("App component interactions", () => {
     expect(
       screen.queryByRole("dialog", { name: "QR Code Modal" }),
     ).not.toBeInTheDocument()
+
+    // Re-open and close with Escape key
+    fireEvent.click(qrBtn)
+    expect(
+      screen.getByRole("dialog", { name: "QR Code Modal" }),
+    ).toBeInTheDocument()
+    fireEvent.keyDown(document, { key: "Escape" })
+    expect(
+      screen.queryByRole("dialog", { name: "QR Code Modal" }),
+    ).not.toBeInTheDocument()
+  })
+
+  it("includes serverOs options in the project tech filter select and keeps non-exact skill selections visible", () => {
+    render(createElement(App))
+    const techSelect = screen.getByRole("combobox", {
+      name: "技術フィルタ",
+    }) as HTMLSelectElement
+
+    const firstOs = portfolioData.projects[0]!.serverOs[0]!
+    expect(
+      Array.from(techSelect.options).some((option) => option.value === firstOs),
+    ).toBe(true)
+
+    fireEvent.change(techSelect, { target: { value: firstOs } })
+    expect(techSelect.value).toBe(firstOs)
   })
 
   it("renders TurnstileGate when unverified and transitions to portfolio upon successful verification", async () => {

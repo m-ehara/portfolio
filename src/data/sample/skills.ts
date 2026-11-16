@@ -8,7 +8,6 @@ export const skillsData: SkillItem[] = [
     category: "language",
     rank: "★",
     yearsLabel: { ja: "5年以上", en: "5+ yrs" },
-    highlight: true,
   },
   {
     id: "javascript",
@@ -30,7 +29,6 @@ export const skillsData: SkillItem[] = [
     category: "language",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
 
   // Frameworks & Libraries
@@ -40,7 +38,6 @@ export const skillsData: SkillItem[] = [
     category: "framework",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
   {
     id: "nextjs",
@@ -48,7 +45,6 @@ export const skillsData: SkillItem[] = [
     category: "framework",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
   {
     id: "trpc",
@@ -56,7 +52,6 @@ export const skillsData: SkillItem[] = [
     category: "framework",
     rank: "○",
     yearsLabel: { ja: "業務経験あり", en: "Practical exp" },
-    highlight: true,
   },
   {
     id: "vitest",
@@ -73,7 +68,6 @@ export const skillsData: SkillItem[] = [
     category: "db",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
   {
     id: "mysql",
@@ -97,7 +91,6 @@ export const skillsData: SkillItem[] = [
     category: "infra",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
   {
     id: "cloudflare-workers",
@@ -130,7 +123,6 @@ export const skillsData: SkillItem[] = [
     category: "ai",
     rank: "●",
     yearsLabel: { ja: "1年以上", en: "1+ yr" },
-    highlight: true,
   },
   {
     id: "gemini",
@@ -154,6 +146,5 @@ export const skillsData: SkillItem[] = [
     category: "other",
     rank: "◎",
     yearsLabel: { ja: "3年以上", en: "3+ yrs" },
-    highlight: true,
   },
 ]

@@ -30,7 +30,7 @@ const JST_YEAR_MONTH_FORMATTER = new Intl.DateTimeFormat("en-US", {
  * 実行環境のローカルタイムゾーンや getMonth() の 0 始まり仕様に依存せず
  * 日本時間（JST）基準の「年」と「月（1〜12）」を抽出する。
  */
-export const getCurrentYearMonth = (reference?: TimeReference): YearMonth => {
+const getCurrentYearMonth = (reference?: TimeReference): YearMonth => {
   if (
     reference &&
     typeof reference === "object" &&
@@ -108,7 +108,7 @@ export const formatDurationLabel = (months: number): LocalizedText => ({
 /**
  * 開始年月と終了年月（省略時は「現在 / Present」）から日英の期間文字列を生成する。
  */
-export const formatPeriodRange = (
+const formatPeriodRange = (
   start: YearMonth,
   end?: YearMonth,
 ): LocalizedText => {

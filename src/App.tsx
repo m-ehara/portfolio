@@ -54,7 +54,7 @@ const persistPortfolioData = (value: PortfolioData): void => {
   }
 }
 
-export const App = () => {
+const App = () => {
   const [locale, setLocale] = useState<Locale>("ja")
   const [theme, setTheme] = useState<ThemeMode>("dark")
   const [viewMode, setViewMode] = useState<ViewMode>("interactive")

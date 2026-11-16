@@ -72,6 +72,7 @@ TypeScript による堅牢な設計、コンポーネント指向、CSS Modules 
 | **アイコン** | Lucide React |
 | **パッケージマネージャー** | pnpm |
 | **Linter / Formatter** | Oxlint (`oxlint`), Oxfmt (`oxfmt`) |
+| **未使用コード検出** | Knip (`knip`) |
 | **単体テスト** | Vitest + Testing Library (`@testing-library/react`) |
 | **E2E / VRT テスト** | Playwright (`@playwright/test`) |
 | **ホスティング / エッジ** | Cloudflare Workers（Static Assets + Worker Routing） |
@@ -134,6 +135,9 @@ pnpm run lint
 # コード自動整形 & チェック (Oxfmt)
 pnpm run fmt
 pnpm run fmt:check
+
+# 未使用ファイル・依存・エクスポート検出 (Knip)
+pnpm run knip
 
 # 単体テスト実行 (Vitest)
 pnpm run test
@@ -230,7 +234,7 @@ pnpm exec wrangler dev --port 3000
 > **Note**: `TURNSTILE_SECRET_KEY` 未設定時のダミーキーフォールバックはローカルホスト（`localhost` / `127.0.0.1` / `[::1]`）に限定されており、本番ドメインでは安全のため `500`（フェイルクローズ）となります。
 
 ### 2. GitHub Actions による自動 CI/CD（推奨）
-`main` ブランチへの push 時に、自動で **Lint → Format チェック → 単体テスト → ビルド（`VITE_IGNORE_PRIVATE_DATA=true`） → Cloudflare Workers デプロイ** が実行されます。`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` が未設定のフォーク環境等ではデプロイステップは安全にスキップされます。
+`main` ブランチへの push 時に、自動で **Lint → Format チェック → Knip チェック → 単体テスト → ビルド（`VITE_IGNORE_PRIVATE_DATA=true`） → Cloudflare Workers デプロイ** が実行されます。`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` が未設定のフォーク環境等ではデプロイステップは安全にスキップされます。
 
 GitHub リポジトリの `Settings > Secrets and variables > Actions` に以下のシークレットを設定してください：
 

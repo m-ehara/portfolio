@@ -38,6 +38,9 @@ jobs:
       - name: Check formatting with Oxfmt
         run: pnpm run fmt:check
 
+      - name: Check unused code and dependencies with Knip
+        run: pnpm run knip
+
       - name: Run unit tests with Vitest
         run: pnpm run test
 
