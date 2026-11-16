@@ -5,14 +5,12 @@ import type {
   RoleExperience,
   SpecialtyItem,
 } from "../../types/portfolio"
-import { formatYearMonthSlash } from "../../utils/date"
 import {
   DEFAULT_PORTFOLIO_QR_SVG_PATH,
   DEFAULT_PORTFOLIO_URL,
 } from "../constants"
 
 export const profileInfo: ProfileInfo = {
-  updatedAt: formatYearMonthSlash(),
   name: {
     ja: "山田 太郎",
     en: "Taro Yamada",

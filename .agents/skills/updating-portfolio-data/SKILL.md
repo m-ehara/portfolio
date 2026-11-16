@@ -27,7 +27,7 @@ compatibility: Requires Node.js >= 20 and pnpm.
    - **スキルの追加・評価変更（`src/data/private/skills.ts`）**:
      - `rank` には `"★"`（5年以上）、`"◎"`（3年以上）、`"●"`（1年以上）、`"○"`（業務経験あり）、`"△"`（知識あり）のいずれかを指定し、`yearsLabel`（`ja` / `en`）もランクに合わせて更新します。
    - **基本プロフィール・自己PR・経歴概要の編集（`src/data/private/profile.ts`）**:
-     - スキルシートの更新日を反映する場合は `profileInfo.updatedAt`（`"YYYY/MM"` 形式）を確認し、ブランド名（`brandName`, `brandRole`）、開始年月（`careerStart`, `freelanceStart`）、URL・QRパス（`portfolioUrl`, `portfolioQrSvgPath`）、`featuredStack` もここで管理します。
+     - ブランド名（`brandName`, `brandRole`）、開始年月（`careerStart`, `freelanceStart`）、URL・QRパス（`portfolioUrl`, `portfolioQrSvgPath`）、`featuredStack` を管理します（なお、更新日は画面表示時に `formatYearMonthSlash()` で当月が自動算出されます）。
 
 3. **フォーマットと検証の実行**:
    - `pnpm run fmt` でコードを整形し、`pnpm run lint`・`pnpm run test`・`pnpm run build` がすべてパスすることを確認します。

@@ -1,5 +1,12 @@
 import { createElement } from "react"
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import App from "../../src/App"
 import { Footer } from "../../src/components/Footer"
@@ -32,18 +39,18 @@ describe("portfolioData & filter utilities", () => {
   })
 
   it("filters skills by category, minimum rank, and search query", () => {
-    const langSkills = filterSkills(portfolioData.skills, {
+    const langSkills = filterSkills(samplePortfolioData.skills, {
       category: "language",
     })
     expect(langSkills.some((s) => s.name === "TypeScript")).toBe(true)
     expect(langSkills.every((s) => s.category === "language")).toBe(true)
 
-    const topSkills = filterSkills(portfolioData.skills, {
+    const topSkills = filterSkills(samplePortfolioData.skills, {
       minRank: "★",
     })
     expect(topSkills.every((s) => s.rank === "★")).toBe(true)
 
-    const searched = filterSkills(portfolioData.skills, {
+    const searched = filterSkills(samplePortfolioData.skills, {
       query: "trpc",
     })
     expect(searched).toHaveLength(1)
@@ -51,19 +58,19 @@ describe("portfolioData & filter utilities", () => {
   })
 
   it("filters projects by role, technology, and search query", () => {
-    const pmProjects = filterProjects(portfolioData.projects, {
+    const pmProjects = filterProjects(samplePortfolioData.projects, {
       role: "PM",
     })
     expect(pmProjects.length).toBeGreaterThanOrEqual(1)
     expect(pmProjects.every((p) => p.roles.includes("PM"))).toBe(true)
 
-    const trpcProjects = filterProjects(portfolioData.projects, {
+    const trpcProjects = filterProjects(samplePortfolioData.projects, {
       tech: "tRPC",
     })
     expect(trpcProjects).toHaveLength(1)
     expect(trpcProjects[0]?.id).toBe(1)
 
-    const goProjects = filterProjects(portfolioData.projects, {
+    const goProjects = filterProjects(samplePortfolioData.projects, {
       query: "Golang",
     })
     expect(goProjects).toHaveLength(1)
@@ -551,5 +558,106 @@ describe("App component interactions", () => {
     expect(screen.getByText("キャッシュ復元案件")).toBeInTheDocument()
     expect(screen.getByText("キャッシュ済みユーザー")).toBeInTheDocument()
     expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it("toggles skill selection without scrolling on deselection and supports reverse matching", () => {
+    render(createElement(App))
+
+    const skillsSection = document.getElementById("skills")
+    const projectsSection = document.getElementById("projects")
+    expect(skillsSection).not.toBeNull()
+    expect(projectsSection).not.toBeNull()
+
+    const scrollIntoViewMock = vi.fn()
+    projectsSection!.scrollIntoView = scrollIntoViewMock
+
+    const techSelect = screen.getByRole("combobox", {
+      name: "技術フィルタ",
+    }) as HTMLSelectElement
+
+    const tsSkillBtn = within(skillsSection!).getByRole("button", {
+      name: /TypeScript/i,
+    })
+
+    // Select skill -> sets filter and scrolls to #projects
+    fireEvent.click(tsSkillBtn)
+    expect(techSelect.value).toBe("TypeScript")
+    expect(tsSkillBtn.className).toContain("skillSelected")
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1)
+
+    // Click same skill again -> clears filter without scrolling
+    fireEvent.click(tsSkillBtn)
+    expect(techSelect.value).toBe("all")
+    expect(tsSkillBtn.className).not.toContain("skillSelected")
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1)
+
+    // Select "Amazon Linux" -> highlights "Linux" skill via reverse match, and clicking "Linux" clears filter
+    fireEvent.change(techSelect, { target: { value: "Amazon Linux" } })
+    const linuxSkillBtn = within(skillsSection!).getByRole("button", {
+      name: /^Linux\b/i,
+    })
+    expect(linuxSkillBtn.className).toContain("skillSelected")
+
+    fireEvent.click(linuxSkillBtn)
+    expect(techSelect.value).toBe("all")
+    expect(linuxSkillBtn.className).not.toContain("skillSelected")
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not show copied state in QrCodeModal when both clipboard API and execCommand fail", async () => {
+    const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(
+      navigator,
+      "clipboard",
+    )
+    const originalExecCommandDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      "execCommand",
+    )
+
+    Object.defineProperty(navigator, "clipboard", {
+      value: {
+        writeText: vi.fn().mockRejectedValue(new Error("Clipboard denied")),
+      },
+      configurable: true,
+    })
+    Object.defineProperty(document, "execCommand", {
+      value: vi.fn().mockReturnValue(false),
+      configurable: true,
+    })
+
+    try {
+      render(createElement(App))
+      const qrBtn = screen.getByRole("button", { name: "Open QR Code Modal" })
+      fireEvent.click(qrBtn)
+
+      const copyBtn = screen.getByRole("button", { name: "URLをコピー" })
+      await act(async () => {
+        fireEvent.click(copyBtn)
+      })
+
+      expect(screen.queryByText("コピー済み")).not.toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: "URLをコピー" }),
+      ).toBeInTheDocument()
+    } finally {
+      if (originalClipboardDescriptor) {
+        Object.defineProperty(
+          navigator,
+          "clipboard",
+          originalClipboardDescriptor,
+        )
+      } else {
+        Reflect.deleteProperty(navigator, "clipboard")
+      }
+      if (originalExecCommandDescriptor) {
+        Object.defineProperty(
+          document,
+          "execCommand",
+          originalExecCommandDescriptor,
+        )
+      } else {
+        Reflect.deleteProperty(document, "execCommand")
+      }
+    }
   })
 })

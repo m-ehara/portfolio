@@ -46,7 +46,9 @@ export interface PhaseExperience {
   rank: SkillRank
 }
 
-export type PhaseKey = "planning" | "requirements" | "basic_design" | "detailed_design" | "implementation" | "unit_test" | "integration_test" | "maintenance"
+export type ProjectPhaseKey = "requirements" | "basic_design" | "detailed_design" | "implementation" | "unit_test" | "integration_test" | "maintenance"
+
+type PhaseKey = "planning" | ProjectPhaseKey
 
 export interface SpecialtyItem {
   id: string
@@ -79,7 +81,7 @@ export interface ProjectItem {
   databases: string[]
   serverOs: string[]
   frameworksAndTools: string[]
-  phases: PhaseKey[]
+  phases: ProjectPhaseKey[]
   responsibilities: LocalizedText
   acquiredSkills: LocalizedText[]
   comment: LocalizedText
@@ -87,7 +89,6 @@ export interface ProjectItem {
 }
 
 export interface PortfolioData {
-  updatedAt: string
   name: LocalizedText
   handle: string
   githubUrl: string

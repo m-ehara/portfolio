@@ -12,7 +12,6 @@ import {
 import {
   TURNSTILE_DUMMY_SITE_KEY,
   TURNSTILE_SCRIPT_URL,
-  TURNSTILE_VERIFY_STORAGE_KEY,
   UI_TEXT,
 } from "../data/portfolioData"
 import styles from "../styles/modules/TurnstileGate.module.css"
@@ -61,7 +60,6 @@ export const TurnstileGate = ({
           import.meta.env.DEV &&
           !response.headers.get("content-type")?.includes("application/json")
         ) {
-          window.sessionStorage.setItem(TURNSTILE_VERIFY_STORAGE_KEY, "true")
           onVerified()
           return
         }
@@ -76,7 +74,6 @@ export const TurnstileGate = ({
           portfolioData?: PortfolioData
         }
         if (resData.verified) {
-          window.sessionStorage.setItem(TURNSTILE_VERIFY_STORAGE_KEY, "true")
           onVerified(resData.portfolioData)
         } else {
           setStatus("error")
@@ -88,6 +85,17 @@ export const TurnstileGate = ({
     [onVerified],
   )
 
+  const removeWidget = useCallback(() => {
+    if (widgetIdRef.current && window.turnstile) {
+      try {
+        window.turnstile.remove(widgetIdRef.current)
+      } catch {
+        // Ignore removal errors on stale widget IDs
+      }
+      widgetIdRef.current = null
+    }
+  }, [])
+
   const renderWidget = useCallback(() => {
     const container = containerRef.current
     const turnstile = window.turnstile
@@ -95,14 +103,8 @@ export const TurnstileGate = ({
       return
     }
 
-    if (widgetIdRef.current) {
-      try {
-        turnstile.remove(widgetIdRef.current)
-      } catch {
-        // Ignore removal errors on stale widget IDs
-      }
-      widgetIdRef.current = null
-    }
+    removeWidget()
+    setStatus("idle")
 
     container.innerHTML = ""
     widgetIdRef.current = turnstile.render(container, {
@@ -119,20 +121,13 @@ export const TurnstileGate = ({
         setStatus("idle")
       },
     })
-  }, [locale, siteKey, theme, verifyToken])
+  }, [locale, removeWidget, siteKey, theme, verifyToken])
 
   useEffect(() => {
     if (window.turnstile) {
       renderWidget()
       return () => {
-        if (widgetIdRef.current && window.turnstile) {
-          try {
-            window.turnstile.remove(widgetIdRef.current)
-          } catch {
-            // Ignore cleanup errors
-          }
-          widgetIdRef.current = null
-        }
+        removeWidget()
       }
     }
 
@@ -155,16 +150,9 @@ export const TurnstileGate = ({
 
     return () => {
       script?.removeEventListener("load", handleLoad)
-      if (widgetIdRef.current && window.turnstile) {
-        try {
-          window.turnstile.remove(widgetIdRef.current)
-        } catch {
-          // Ignore cleanup errors
-        }
-        widgetIdRef.current = null
-      }
+      removeWidget()
     }
-  }, [renderWidget])
+  }, [removeWidget, renderWidget])
 
   const handleRetry = () => {
     setStatus("idle")
@@ -261,8 +249,6 @@ export const TurnstileGate = ({
           <div className={styles.footerNote}>{t.turnstileProtectedBy}</div>
         </section>
       </main>
-
-      <div />
     </div>
   )
 }

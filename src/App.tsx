@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { AboutSection } from "./components/AboutSection"
 import { Footer } from "./components/Footer"
 import { Header } from "./components/Header"
@@ -10,6 +10,7 @@ import { TurnstileGate } from "./components/TurnstileGate"
 import {
   PORTFOLIO_DATA_STORAGE_KEY,
   TURNSTILE_VERIFY_STORAGE_KEY,
+  matchesTech,
   parsePortfolioData,
   portfolioData,
 } from "./data/portfolioData"
@@ -54,6 +55,14 @@ const persistPortfolioData = (value: PortfolioData): void => {
   }
 }
 
+const persistTurnstileVerified = (): void => {
+  try {
+    window.sessionStorage.setItem(TURNSTILE_VERIFY_STORAGE_KEY, "true")
+  } catch {
+    // Ignore sessionStorage quota or access errors
+  }
+}
+
 const App = () => {
   const [locale, setLocale] = useState<Locale>("ja")
   const [theme, setTheme] = useState<ThemeMode>("dark")
@@ -82,18 +91,24 @@ const App = () => {
     document.title = `${data.name[locale]} | ${data.jobTitle[locale]}`
   }, [data, isTurnstileVerified, locale])
 
-  const handleVerified = (remoteData?: PortfolioData) => {
+  const handleVerified = useCallback((remoteData?: PortfolioData) => {
     const validRemoteData = parsePortfolioData(remoteData)
     if (validRemoteData) {
       setData(validRemoteData)
       persistPortfolioData(validRemoteData)
     }
+    persistTurnstileVerified()
     setIsTurnstileVerified(true)
-  }
+  }, [])
 
   const handleSelectTech = (tech: string) => {
-    setSelectedTech((prev) => (prev === tech ? "all" : tech))
-    if (tech !== "all") {
+    const isDeselecting =
+      tech === "all" ||
+      (selectedTech !== "all" &&
+        (selectedTech === tech || matchesTech(tech, selectedTech)))
+    const nextTech = isDeselecting ? "all" : tech
+    setSelectedTech(nextTech)
+    if (nextTech !== "all") {
       const el = document.getElementById("projects")
       if (el && typeof el.scrollIntoView === "function") {
         el.scrollIntoView({ behavior: "smooth" })
