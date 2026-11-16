@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { AboutSection } from "./components/AboutSection"
 import { Footer } from "./components/Footer"
 import { Header } from "./components/Header"
@@ -65,7 +65,6 @@ export const App = () => {
   const [data, setData] = useState<PortfolioData>(
     () => readCachedPortfolioData() ?? portfolioData,
   )
-  const initialVerifiedRef = useRef<boolean>(isTurnstileVerified)
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)
@@ -82,40 +81,6 @@ export const App = () => {
     }
     document.title = `${data.name[locale]} | ${data.jobTitle[locale]}`
   }, [data, isTurnstileVerified, locale])
-
-  useEffect(() => {
-    if (!initialVerifiedRef.current || readCachedPortfolioData() !== null) {
-      return
-    }
-
-    let cancelled = false
-    const syncRemotePortfolioData = async () => {
-      try {
-        const response = await fetch("/api/portfolio")
-        if (
-          !response.ok ||
-          !response.headers.get("content-type")?.includes("application/json")
-        ) {
-          return
-        }
-        const payload = (await response.json()) as {
-          portfolioData?: unknown
-        }
-        const remoteData = parsePortfolioData(payload.portfolioData)
-        if (!cancelled && remoteData) {
-          setData(remoteData)
-          persistPortfolioData(remoteData)
-        }
-      } catch {
-        // Ignore network/404 errors when Worker KV is not configured
-      }
-    }
-
-    void syncRemotePortfolioData()
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   const handleVerified = (remoteData?: PortfolioData) => {
     const validRemoteData = parsePortfolioData(remoteData)

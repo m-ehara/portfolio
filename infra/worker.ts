@@ -258,37 +258,6 @@ const handleTurnstileVerify = async (
   })
 }
 
-const handleGetPortfolio = async (
-  request: Request,
-  env: Env,
-): Promise<Response> => {
-  if (request.method !== "GET") {
-    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-      status: 405,
-      headers: {
-        ...JSON_HEADERS,
-        Allow: "GET",
-      },
-    })
-  }
-
-  const portfolioData = await readPortfolioDataFromKv(env)
-  if (portfolioData === null) {
-    return new Response(
-      JSON.stringify({ error: "Portfolio data not found in KV." }),
-      {
-        status: 404,
-        headers: JSON_HEADERS,
-      },
-    )
-  }
-
-  return new Response(JSON.stringify({ portfolioData }), {
-    status: 200,
-    headers: JSON_HEADERS,
-  })
-}
-
 export default {
   fetch: async (request: Request, env: Env): Promise<Response> => {
     const expectedUser = env.BASIC_AUTH_USER
@@ -322,9 +291,6 @@ export default {
     const url = new URL(request.url)
     if (url.pathname === "/api/turnstile/verify") {
       return handleTurnstileVerify(request, env)
-    }
-    if (url.pathname === "/api/portfolio") {
-      return handleGetPortfolio(request, env)
     }
 
     const assetResponse = await env.ASSETS.fetch(request)

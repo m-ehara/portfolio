@@ -4,7 +4,7 @@
 本リポジトリでは、`tests/` 配下のすべてのファイルを `.ts` 拡張子に統一しています：
 - `tests/unit/setup.ts`: `@testing-library/jest-dom/vitest` を読み込み、DOM マッチャー（`.toBeInTheDocument()` 等）を有効化します。
 - `tests/unit/portfolio.test.ts`: データ整合性、`filterSkills` / `filterProjects`、および `App` コンポーネントのUI操作テスト（Vitest: `*.test.ts`）。`src/data/private/` の有無にかかわらず（`src/data/sample/` フォールバック環境でも）全テストがパスするよう、`portfolioData` の動的参照を用いて検証します。
-- `tests/unit/worker.test.ts`: Cloudflare Worker の Basic 認証（`verifyBasicAuth`）、Turnstile 検証（`verifyTurnstileToken` / `POST /api/turnstile/verify`）、および `PORTFOLIO_KV` 配信（`GET /api/portfolio` / `fetch` ハンドラ）の単体テスト（Vitest: `*.test.ts`）。
+- `tests/unit/worker.test.ts`: Cloudflare Worker の Basic 認証（`verifyBasicAuth`）、Turnstile 検証（`verifyTurnstileToken` / `POST /api/turnstile/verify`）、および検証成功時の `PORTFOLIO_KV` 配信の単体テスト（Vitest: `*.test.ts`）。
 - `tests/vrt/*.spec.ts`: Playwright によるビジュアルリグレッションテスト（`desktop.spec.ts`, `mobile.spec.ts`, `print.spec.ts` および `tests/vrt/helper.ts`）。生成されるスナップショット画像（`tests/vrt/snapshots/`）は `.gitignore` によりバージョン管理対象外としています。
 
 TypeScript では `.ts` ファイル内の `<App />` 記法が型アサーションと解釈され構文エラーになるため、コンポーネント描画には必ず `"react"` の `createElement` を使用してください。また、個人情報や特定案件文字列をハードコードせず、`portfolioData`（`private/` または `sample/`）を参照してください：

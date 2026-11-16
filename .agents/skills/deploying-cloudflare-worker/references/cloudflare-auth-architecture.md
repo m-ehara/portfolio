@@ -13,7 +13,6 @@ Cloudflare Worker (`infra/worker.ts`)
   │    └─> `401 Unauthorized` + `WWW-Authenticate: Basic realm="Portfolio Private Access"` を返却
   └─ 認証成功（SHA-256固定長ハッシュ化＋定数時間バイト比較 `timingSafeEqualString` で文字数・内容のタイミング漏洩を防止）
        ├─ `POST /api/turnstile/verify` -> `TURNSTILE_SECRET_KEY` 検証（本番ドメインで未設定時は `500` フェイルクローズ、`localhost`/`127.0.0.1`/`[::1]` のみダミーキーフォールバック）。検証成功時に `PORTFOLIO_KV`（`cacheTtl: 3600`）が設定されていれば `{ verified: true, portfolioData }` を返却
-       ├─ `GET /api/portfolio` -> `PORTFOLIO_KV` から個人データを JSON 返却（未設定・未登録時は `404`）
        └─ その他 -> `env.ASSETS.fetch(request)` に委譲し、セキュリティヘッダー（`CSP`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `X-Robots-Tag: noindex, nofollow, noarchive`, `Cache-Control: private, no-cache`）を付与して `./dist` の静的アセットを配信
 ```
 
