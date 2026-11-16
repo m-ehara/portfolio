@@ -85,7 +85,9 @@ export const verifyBasicAuth = async (
   const base64Credentials = authHeader.slice(6).trim()
   let decoded: string
   try {
-    decoded = atob(base64Credentials)
+    const binary = atob(base64Credentials)
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0))
+    decoded = new TextDecoder("utf-8", { fatal: true }).decode(bytes)
   } catch {
     return false
   }

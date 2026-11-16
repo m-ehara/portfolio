@@ -7,7 +7,8 @@ import {
   ShieldCheck,
   Users2,
 } from "lucide-react"
-import { RANK_LEGEND, UI_TEXT } from "../data/portfolioData"
+import { RANK_LEGEND } from "../data/constants"
+import { UI_TEXT } from "../data/i18n"
 import styles from "../styles/modules/AboutSection.module.css"
 import type { Locale, PortfolioData } from "../types/portfolio"
 

@@ -38,6 +38,7 @@ Cloudflare Worker (`infra/worker.ts`)
 - `run_worker_first: true`: `/index.html` や `/assets/*` を含む全リクエストで必ず最初に `infra/worker.ts` を実行させます。
 
 ## 3. GitHub Actions CI/CD (`.github/workflows/deploy.yml`)
-- `main` ブランチへの `push` および `pull_request` で起動します。
-- `quality-and-test` ジョブ: `pnpm install --frozen-lockfile` → `pnpm run lint` → `pnpm run fmt:check` → `pnpm run test` → `VITE_IGNORE_PRIVATE_DATA=true pnpm run build` を実行し、`dist` アーティファクトを保存します。
-- `deploy` ジョブ: `main` ブランチへの `push` 時のみ実行され、`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` が未設定（フォーク等）の場合は安全にスキップされます。`CLOUDFLARE_KV_NAMESPACE_ID` が設定されていればデプロイ直前に `wrangler.jsonc` へ `PORTFOLIO_KV` バインディングを一時注入し、`cloudflare/wrangler-action@v3`（`wranglerVersion: "4.156.0"`）を用いて Basic 認証・Turnstile シークレット（`BASIC_AUTH_USER`, `BASIC_AUTH_PASS`, `TURNSTILE_SECRET_KEY`）を自動同期してデプロイします。
+- ローカルからの直接デプロイリスクを避けるため、Cloudflare Workers への反映は GitHub Actions 経由を基本方針としています。
+- `main` ブランチへの `push` および `pull_request`、`workflow_dispatch` で起動します。
+- `quality-and-test` ジョブ: `pnpm install --frozen-lockfile` → `pnpm run lint` → `pnpm run fmt:check` → `pnpm run knip` → `pnpm run test` → `VITE_IGNORE_PRIVATE_DATA=true pnpm run build` を実行し、`dist` アーティファクトを保存します。
+- `deploy` ジョブ: `main` ブランチへの `push` または `workflow_dispatch` 時のみ実行され、`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` が未設定（フォーク等）の場合は安全にスキップされます。`CLOUDFLARE_KV_NAMESPACE_ID` が設定されていればデプロイ直前に `wrangler.jsonc` へ `PORTFOLIO_KV` バインディングを一時注入し、`cloudflare/wrangler-action@v3`（`wranglerVersion: "4.156.0"`）を用いて Basic 認証・Turnstile シークレット（`BASIC_AUTH_USER`, `BASIC_AUTH_PASS`, `TURNSTILE_SECRET_KEY`）を自動同期してデプロイします。

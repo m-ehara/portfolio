@@ -8,12 +8,12 @@ import {
   Sparkles,
   Users,
 } from "lucide-react"
+import { UI_TEXT } from "../data/i18n"
 import {
-  UI_TEXT,
   calculateElapsedYears,
   formatElapsedYearsLabel,
   formatYearMonthSlash,
-} from "../data/portfolioData"
+} from "../utils/date"
 import styles from "../styles/modules/HeroSection.module.css"
 import type {
   Locale,

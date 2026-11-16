@@ -1,13 +1,8 @@
 import { useState } from "react"
 import { Filter, MousePointerClick, Search } from "lucide-react"
-import {
-  RANK_LEGEND,
-  RANK_SCORE,
-  SKILL_CATEGORIES,
-  UI_TEXT,
-  filterSkills,
-  matchesTech,
-} from "../data/portfolioData"
+import { RANK_LEGEND, RANK_SCORE, SKILL_CATEGORIES } from "../data/constants"
+import { UI_TEXT } from "../data/i18n"
+import { filterSkills } from "../utils/filters"
 import styles from "../styles/modules/SkillsSection.module.css"
 import type {
   Locale,
@@ -51,9 +46,6 @@ export const SkillsSection = ({
   const [query, setQuery] = useState("")
 
   const filtered = filterSkills(skills, { category, minRank, query })
-  const hasDirectTechMatch =
-    selectedTech !== "all" &&
-    skills.some((s) => matchesTech(s.name, selectedTech))
 
   return (
     <section id="skills" className="section">
@@ -145,11 +137,10 @@ export const SkillsSection = ({
           <div className={styles.skillsGrid}>
             {filtered.map((skill) => {
               const score = RANK_SCORE[skill.rank]
+              const cleanName = skill.name.split(" (")[0] ?? skill.name
               const isSelected =
                 selectedTech !== "all" &&
-                (hasDirectTechMatch
-                  ? matchesTech(skill.name, selectedTech)
-                  : matchesTech(selectedTech, skill.name))
+                (skill.name === selectedTech || cleanName === selectedTech)
 
               return (
                 <button
@@ -159,12 +150,7 @@ export const SkillsSection = ({
                     isSelected ? styles.skillSelected : ""
                   }`}
                   onClick={() => {
-                    if (isSelected) {
-                      onSelectTech("all")
-                      return
-                    }
-                    const cleanName = skill.name.split(" (")[0] ?? skill.name
-                    onSelectTech(cleanName)
+                    onSelectTech(isSelected ? "all" : cleanName)
                   }}
                 >
                   <div className={styles.skillCardTop}>

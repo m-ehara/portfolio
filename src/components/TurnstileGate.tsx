@@ -12,8 +12,8 @@ import {
 import {
   TURNSTILE_DUMMY_SITE_KEY,
   TURNSTILE_SCRIPT_URL,
-  UI_TEXT,
-} from "../data/portfolioData"
+} from "../data/constants"
+import { UI_TEXT } from "../data/i18n"
 import styles from "../styles/modules/TurnstileGate.module.css"
 import type { Locale, PortfolioData, ThemeMode } from "../types/portfolio"
 

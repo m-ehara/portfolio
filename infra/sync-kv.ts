@@ -7,22 +7,6 @@ import { PORTFOLIO_KV_KEY } from "./worker.ts"
 
 const OUTPUT_RELATIVE_PATH = ".wrangler/tmp/portfolio-data.json"
 
-type PutMode = "local" | "remote" | null
-
-const parsePutMode = (argv: string[]): PutMode => {
-  const putArg = argv.find((arg) => arg.startsWith("--put="))
-  if (!putArg) {
-    return null
-  }
-  const mode = putArg.slice("--put=".length)
-  if (mode === "local" || mode === "remote") {
-    return mode
-  }
-  throw new Error(
-    `Invalid --put mode: "${mode}". Use --put=local or --put=remote.`,
-  )
-}
-
 const resolveKvNamespaceId = (rootDir: string): string | null => {
   const envValue = process.env.CLOUDFLARE_KV_NAMESPACE_ID?.trim()
   if (envValue) {
@@ -45,8 +29,14 @@ const resolveKvNamespaceId = (rootDir: string): string | null => {
 }
 
 const main = async (): Promise<void> => {
-  const putMode = parsePutMode(process.argv.slice(2))
   const rootDir = process.cwd()
+  const namespaceId = resolveKvNamespaceId(rootDir)
+  if (!namespaceId) {
+    throw new Error(
+      "CLOUDFLARE_KV_NAMESPACE_ID is required. Set it in .dev.vars or environment variables.",
+    )
+  }
+
   const outputPath = path.resolve(rootDir, OUTPUT_RELATIVE_PATH)
   const hasPrivateProfile = existsSync(
     path.resolve(rootDir, "src/data/private/profile.ts"),
@@ -83,36 +73,27 @@ const main = async (): Promise<void> => {
     await server.close()
   }
 
-  if (putMode) {
-    const targetFlag = putMode === "remote" ? "--remote" : "--local"
-    const namespaceId =
-      putMode === "remote" ? resolveKvNamespaceId(rootDir) : null
-    const targetBindingArg = namespaceId
-      ? `--namespace-id=${namespaceId}`
-      : "--binding=PORTFOLIO_KV"
+  const result = spawnSync(
+    "pnpm",
+    [
+      "exec",
+      "wrangler",
+      "kv",
+      "key",
+      "put",
+      `--namespace-id=${namespaceId}`,
+      PORTFOLIO_KV_KEY,
+      `--path=${outputPath}`,
+      "--remote",
+    ],
+    {
+      cwd: rootDir,
+      stdio: "inherit",
+    },
+  )
 
-    const result = spawnSync(
-      "pnpm",
-      [
-        "exec",
-        "wrangler",
-        "kv",
-        "key",
-        "put",
-        targetBindingArg,
-        PORTFOLIO_KV_KEY,
-        `--path=${outputPath}`,
-        targetFlag,
-      ],
-      {
-        cwd: rootDir,
-        stdio: "inherit",
-      },
-    )
-
-    if (result.status !== 0) {
-      process.exit(result.status ?? 1)
-    }
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1)
   }
 }
 

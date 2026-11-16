@@ -39,13 +39,12 @@ compatibility: Requires Node.js >= 20, pnpm, and wrangler.
 
 4. **Cloudflare Workers KV (`PORTFOLIO_KV`) への実データ同期**:
    - `wrangler.jsonc` にはアカウント固有の KV Namespace ID を記載せず、`.dev.vars`（ローカル `pnpm run kv:put:remote` 用）および GitHub Actions Secrets（`CLOUDFLARE_KV_NAMESPACE_ID`：CI デプロイ時に一時注入）で管理します。
-   - 本番静的アセット（`dist/`）には `src/data/sample/` のみを含め（`pnpm run deploy` および CI ビルドは `VITE_IGNORE_PRIVATE_DATA=true` でビルド）、実データは `PORTFOLIO_KV` から配信します。
-   - `src/data/private/` を KV へアップロードするには以下を実行します：
+   - 本番静的アセット（`dist/`）には `src/data/sample/` のみを含め（CI ビルド時に `VITE_IGNORE_PRIVATE_DATA=true` でビルド）、実データは `PORTFOLIO_KV` から配信します。
+   - `src/data/private/` を本番 KV へアップロードするには以下を実行します：
      ```bash
-     pnpm run kv:put:local   # ローカル wrangler dev 検証用
-     pnpm run kv:put:remote  # .dev.vars または環境変数の CLOUDFLARE_KV_NAMESPACE_ID を参照して本番 KV へ反映
+     pnpm run kv:put:remote  # .dev.vars または環境変数の CLOUDFLARE_KV_NAMESPACE_ID を参照して本番 KV へ反映（未設定時はエラー終了）
      ```
 
-5. **テスト検証とデプロイ**:
+5. **テスト検証とデプロイ（GitHub Actions 一本化方針）**:
    - `pnpm run test` を実行し、`tests/unit/worker.test.ts` の全ケース（未認証時 `401`、正常認証時 `200`、環境変数未設定時のフェイルクローズ `500`、Turnstile 検証 `/api/turnstile/verify` での KV 配信含む）がパスすることを確認します。
-   - 手動デプロイは `pnpm run deploy`（自動で `VITE_IGNORE_PRIVATE_DATA=true` ビルドを実行）、自動デプロイは `main` ブランチへの push（`.github/workflows/deploy.yml`）で行います。
+   - ローカルからの直接デプロイはリスク防止のため廃止しており、Cloudflare Workers への反映は `main` ブランチへの push または `workflow_dispatch` による GitHub Actions（`.github/workflows/deploy.yml`）経由を基本方針とします。

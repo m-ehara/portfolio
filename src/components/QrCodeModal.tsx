@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Check, Copy, Download, QrCode, X } from "lucide-react"
-import { UI_TEXT } from "../data/portfolioData"
+import { UI_TEXT } from "../data/i18n"
 import styles from "../styles/modules/QrCodeModal.module.css"
 import type { Locale } from "../types/portfolio"
 

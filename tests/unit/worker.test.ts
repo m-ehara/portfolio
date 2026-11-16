@@ -22,6 +22,21 @@ describe("Cloudflare Worker Basic Authentication", () => {
     expect(await verifyBasicAuth("Bearer token", "admin", "secret123")).toBe(
       false,
     )
+
+    const utf8Bytes = new TextEncoder().encode("管理者:秘密のパス123")
+    const utf8Binary = Array.from(utf8Bytes, (b) =>
+      String.fromCharCode(b),
+    ).join("")
+    const utf8Header = `Basic ${btoa(utf8Binary)}`
+    expect(await verifyBasicAuth(utf8Header, "管理者", "秘密のパス123")).toBe(
+      true,
+    )
+    expect(await verifyBasicAuth(utf8Header, "管理者", "wrong")).toBe(false)
+
+    const invalidUtf8Header = `Basic ${btoa("\xff\xfe:pass")}`
+    expect(await verifyBasicAuth(invalidUtf8Header, "\xff\xfe", "pass")).toBe(
+      false,
+    )
   })
 
   it("returns 401 with WWW-Authenticate header when Authorization header is missing or invalid", async () => {
