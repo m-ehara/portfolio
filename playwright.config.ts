@@ -1,14 +1,14 @@
 import { defineConfig, devices } from "@playwright/test"
 
 export default defineConfig({
-  testDir: "./src/test",
+  testDir: "./tests/vrt",
   testMatch: "*.spec.ts",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "list",
-  snapshotPathTemplate: "{testDir}/{testFileName}-snapshots/{arg}{ext}",
+  snapshotPathTemplate: "{testDir}/snapshots/{testFileName}/{arg}{ext}",
   updateSnapshots: "missing",
   expect: {
     toHaveScreenshot: {

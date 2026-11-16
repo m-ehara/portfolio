@@ -27,7 +27,7 @@ dist-ssr
 coverage
 
 # Playwright VRT snapshots and reports
-src/test/*-snapshots/
+tests/vrt/snapshots/
 test-results/
 playwright-report/
 blob-report/

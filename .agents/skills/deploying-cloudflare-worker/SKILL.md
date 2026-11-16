@@ -1,7 +1,7 @@
 ---
 name: deploying-cloudflare-worker
 description: >-
-  Cloudflare Workers（Static Assets）および Basic 認証レイヤー（worker/index.ts, wrangler.jsonc,
+  Cloudflare Workers（Static Assets）および Basic 認証レイヤー（infra/worker.ts, wrangler.jsonc,
   .github/workflows/deploy.yml）の設定・ローカル検証・シークレット管理・デプロイを行うスキル。
   Use this skill when modifying authentication logic, updating Cloudflare Workers
   Static Assets settings, managing secrets (BASIC_AUTH_USER / BASIC_AUTH_PASS),
@@ -17,7 +17,7 @@ compatibility: Requires Node.js >= 20, pnpm, and wrangler.
 ## 実行ステップ
 
 1. **Worker & Static Assets 構成の確認**:
-   - `wrangler.jsonc` や `worker/index.ts` を変更する前に、必ず [references/cloudflare-auth-architecture.md](./references/cloudflare-auth-architecture.md) を読み、認証フローの仕様を確認してください。
+   - `wrangler.jsonc` や `infra/worker.ts` を変更する前に、必ず [references/cloudflare-auth-architecture.md](./references/cloudflare-auth-architecture.md) を読み、認証フローの仕様を確認してください。
    - **最重要ルール**: `wrangler.jsonc` の `assets.run_worker_first: true` は絶対に削除・`false` 化しないでください。これが `true` でない場合、静的ファイル（`./dist`）が Worker を経由せずに直接公開配信され、Basic 認証がバイパスされます。
 
 2. **ローカルでの Wrangler 認証動作テスト**:
@@ -47,5 +47,5 @@ compatibility: Requires Node.js >= 20, pnpm, and wrangler.
      ```
 
 5. **テスト検証とデプロイ**:
-   - `pnpm run test` を実行し、`src/test/worker.test.ts` の全ケース（未認証時 `401`、正常認証時 `200`、環境変数未設定時のフェイルクローズ `500`、KV配信API `/api/portfolio` 含む）がパスすることを確認します。
+   - `pnpm run test` を実行し、`tests/unit/worker.test.ts` の全ケース（未認証時 `401`、正常認証時 `200`、環境変数未設定時のフェイルクローズ `500`、KV配信API `/api/portfolio` 含む）がパスすることを確認します。
    - 手動デプロイは `pnpm run deploy`（自動で `VITE_IGNORE_PRIVATE_DATA=true` ビルドを実行）、自動デプロイは `main` ブランチへの push（`.github/workflows/deploy.yml`）で行います。

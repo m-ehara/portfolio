@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
-  "main": "worker/index.ts",
+  "main": "infra/worker.ts",
   "compatibility_date": "2026-06-01",
   "assets": {
     "directory": "./dist",

@@ -19,5 +19,5 @@
     "noUncheckedSideEffectImports": true,
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src", "worker"]
+  "include": ["src", "tests", "infra/worker.ts"]
 }
