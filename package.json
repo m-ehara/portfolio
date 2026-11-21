@@ -33,7 +33,7 @@
     "@vitejs/plugin-react": "4.7.0",
     "jsdom": "26.1.0",
     "knip": "6.47.0",
-    "oxfmt": "0.1.0",
+    "oxfmt": "0.79.0",
     "oxlint": "0.18.1",
     "typescript": "7.0.2",
     "vite": "6.4.6",
