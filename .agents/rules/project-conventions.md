@@ -7,6 +7,9 @@ description: Core architecture, tooling, and coding conventions for the my-portf
 
 ## 1. ツールチェーン・パッケージ管理
 - **パッケージマネージャー**: 常に `pnpm`（`pnpm install`, `pnpm run <script>`）を使用すること。`npm` や `yarn` は使用せず、`package-lock.json` や `yarn.lock` を生成・コミットしないこと。
+- **依存パッケージのビルドスクリプト管理（サプライチェーンセキュリティ）**:
+  - `pnpm`（v12+）のデフォルト厳格チェックにより、未分類のライフサイクルスクリプト（`preinstall` / `install` / `postinstall`）を持つパッケージが追加された場合は `ERR_PNPM_IGNORED_BUILDS` で即座に検知・ブロックされる。
+  - エラーが発生した際は思考停止で全許可（`pnpm approve-builds --all`）せず、スキル `evaluating-pnpm-build-scripts` に従って `node_modules` 内のスクリプト実体とプリビルトバイナリの有無を精査し、[pnpm-workspace.yaml](../../pnpm-workspace.yaml) の `allowBuilds` に `true`（実行必須かつ安全）または `false`（プリビルトバイナリ等で実行不要）として判断根拠のコメント付きで記録すること。
 - **開発・プレビューサーバー**: [vite.config.ts](../../vite.config.ts) にて `host: "0.0.0.0"`, `port: 3000`, `strictPort: true` に統一している。
 - **Linter / Formatter / 未使用コード検出**:
   - Linter: `oxlint`（`pnpm run lint` で `src`, `infra`, `tests` を検査）
