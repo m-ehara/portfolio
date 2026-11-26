@@ -1,8 +1,4 @@
-import type {
-  ProjectPhaseKey,
-  SkillCategoryKey,
-  SkillRank,
-} from "../types/portfolio"
+import type { ProjectPhaseKey, SkillCategoryKey, SkillRank } from "../types/portfolio"
 
 export const RANK_SCORE: Record<SkillRank, number> = {
   "★": 5,

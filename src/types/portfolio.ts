@@ -46,7 +46,14 @@ export interface PhaseExperience {
   rank: SkillRank
 }
 
-export type ProjectPhaseKey = "requirements" | "basic_design" | "detailed_design" | "implementation" | "unit_test" | "integration_test" | "maintenance"
+export type ProjectPhaseKey =
+  | "requirements"
+  | "basic_design"
+  | "detailed_design"
+  | "implementation"
+  | "unit_test"
+  | "integration_test"
+  | "maintenance"
 
 type PhaseKey = "planning" | ProjectPhaseKey
 
@@ -109,4 +116,7 @@ export interface PortfolioData {
   projects: ProjectItem[]
 }
 
-export type ProfileInfo = Omit<PortfolioData, "specialties" | "careerSummaries" | "roleExperiences" | "phaseExperiences" | "skills" | "projects">
+export type ProfileInfo = Omit<
+  PortfolioData,
+  "specialties" | "careerSummaries" | "roleExperiences" | "phaseExperiences" | "skills" | "projects"
+>

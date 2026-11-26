@@ -1,9 +1,5 @@
 import { expect, test } from "@playwright/test"
-import {
-  setupVrtHooks,
-  stabilizeForScreenshot,
-  waitForPageReady,
-} from "./helper"
+import { setupVrtHooks, stabilizeForScreenshot, waitForPageReady } from "./helper"
 
 test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,9 +16,7 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
     await expect(page.locator("#projects")).toBeVisible()
 
     const fontSizeBase = await page.evaluate(() =>
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--font-size-base")
-        .trim(),
+      getComputedStyle(document.documentElement).getPropertyValue("--font-size-base").trim(),
     )
     expect(fontSizeBase).toBe("1rem")
 
@@ -60,12 +54,8 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
     const langBtn = page.getByRole("button", { name: "Toggle Language" })
     await langBtn.click()
 
-    await expect(
-      page.getByRole("heading", { name: "Core Strengths & Specialties" }),
-    ).toBeVisible()
-    await expect(
-      page.getByRole("heading", { name: "Technical Skills Matrix" }),
-    ).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Core Strengths & Specialties" })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Technical Skills Matrix" })).toBeVisible()
 
     await stabilizeForScreenshot(page)
     await expect(page).toHaveScreenshot("desktop-en-full.png", {
@@ -86,16 +76,11 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
     await fwTab.click()
     await expect(fwTab).toHaveAttribute("aria-selected", "true")
 
-    const reactSkillBtn = page
-      .locator("#skills")
-      .getByRole("button", { name: /React/i })
-      .first()
+    const reactSkillBtn = page.locator("#skills").getByRole("button", { name: /React/i }).first()
     await reactSkillBtn.click()
 
     // Select PM role filter in Projects section
-    const pmRoleBtn = page
-      .locator("#projects")
-      .getByRole("button", { name: "PM", exact: true })
+    const pmRoleBtn = page.locator("#projects").getByRole("button", { name: "PM", exact: true })
     await pmRoleBtn.click()
 
     const resetBtn = page
@@ -115,17 +100,13 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
       name: /スキルを検索|Search skills/i,
     })
     await skillSearch.fill("NonExistentSkillXYZ")
-    await expect(
-      page.getByText("条件に一致するスキルが見つかりませんでした。"),
-    ).toBeVisible()
+    await expect(page.getByText("条件に一致するスキルが見つかりませんでした。")).toBeVisible()
 
     const projectSearch = page.getByRole("searchbox", {
       name: /案件名・技術・キーワードで検索|Search by title, tech, or keyword/i,
     })
     await projectSearch.fill("NonExistentProjectXYZ")
-    await expect(
-      page.getByText("条件に一致する案件が見つかりませんでした。"),
-    ).toBeVisible()
+    await expect(page.getByText("条件に一致する案件が見つかりませんでした。")).toBeVisible()
 
     await stabilizeForScreenshot(page)
     await expect(page).toHaveScreenshot("desktop-empty-states.png", {
@@ -134,9 +115,7 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
     })
   })
 
-  test("5. renders QR code share modal dialog and copied state accurately", async ({
-    page,
-  }) => {
+  test("5. renders QR code share modal dialog and copied state accurately", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto("/")
     await waitForPageReady(page)
@@ -146,17 +125,13 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
 
     const dialog = page.getByRole("dialog", { name: "QR Code Modal" })
     await expect(dialog).toBeVisible()
-    await expect(
-      dialog.getByRole("img", { name: /QR Code for/i }),
-    ).toBeVisible()
+    await expect(dialog.getByRole("img", { name: /QR Code for/i })).toBeVisible()
 
     const copyBtn = dialog.getByRole("button", {
       name: /URLをコピー|Copy URL/i,
     })
     await copyBtn.click()
-    await expect(
-      dialog.getByRole("button", { name: /コピー済み|Copied!/i }),
-    ).toBeVisible()
+    await expect(dialog.getByRole("button", { name: /コピー済み|Copied!/i })).toBeVisible()
 
     await stabilizeForScreenshot(page)
     await expect(page).toHaveScreenshot("desktop-qr-modal.png", {

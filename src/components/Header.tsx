@@ -14,12 +14,7 @@ import {
 import { UI_TEXT } from "../data/i18n"
 import { portfolioData } from "../data/portfolioData"
 import styles from "../styles/modules/Header.module.css"
-import type {
-  Locale,
-  PortfolioData,
-  ThemeMode,
-  ViewMode,
-} from "../types/portfolio"
+import type { Locale, PortfolioData, ThemeMode, ViewMode } from "../types/portfolio"
 import { QrCodeModal } from "./QrCodeModal"
 
 interface HeaderProps {
@@ -154,9 +149,7 @@ export const Header = ({
               className={styles.iconBtn}
               onClick={onToggleTheme}
               aria-label="Toggle Theme"
-              title={
-                theme === "dark" ? t.switchToLightTitle : t.switchToDarkTitle
-              }
+              title={theme === "dark" ? t.switchToLightTitle : t.switchToDarkTitle}
             >
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </button>
@@ -185,29 +178,14 @@ export const Header = ({
           >
             <div className={`container ${styles.mobileMenuInner}`}>
               {viewMode === "interactive" && (
-                <nav
-                  className={styles.mobileNavLinks}
-                  aria-label="Mobile Section Links"
-                >
-                  <a
-                    href="#about"
-                    className={styles.mobileNavLink}
-                    onClick={closeMenu}
-                  >
+                <nav className={styles.mobileNavLinks} aria-label="Mobile Section Links">
+                  <a href="#about" className={styles.mobileNavLink} onClick={closeMenu}>
                     {t.navAbout}
                   </a>
-                  <a
-                    href="#skills"
-                    className={styles.mobileNavLink}
-                    onClick={closeMenu}
-                  >
+                  <a href="#skills" className={styles.mobileNavLink} onClick={closeMenu}>
                     {t.navSkills}
                   </a>
-                  <a
-                    href="#projects"
-                    className={styles.mobileNavLink}
-                    onClick={closeMenu}
-                  >
+                  <a href="#projects" className={styles.mobileNavLink} onClick={closeMenu}>
                     {t.navProjects}
                   </a>
                 </nav>

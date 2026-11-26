@@ -15,9 +15,7 @@ const waitForFontsLoaded = async (page: Page): Promise<void> => {
       const text = document.body.innerText
       await Promise.all(
         families.flatMap((family) =>
-          weights.map((weight) =>
-            document.fonts.load(`${weight} 16px ${family}`, text),
-          ),
+          weights.map((weight) => document.fonts.load(`${weight} 16px ${family}`, text)),
         ),
       )
       await document.fonts.ready
@@ -37,24 +35,15 @@ export const setupVrtHooks = async (page: Page): Promise<void> => {
   await page.clock.setFixedTime(new Date("2026-10-15T12:00:00+09:00"))
   await page.addInitScript((storageKey) => {
     window.sessionStorage.setItem(storageKey, "true")
-    Element.prototype.scrollIntoView = new Proxy(
-      Element.prototype.scrollIntoView,
-      {
-        apply: (target, thisArg, args) => {
-          const first = args[0]
-          if (
-            first &&
-            typeof first === "object" &&
-            first.behavior === "smooth"
-          ) {
-            return Reflect.apply(target, thisArg, [
-              { ...first, behavior: "instant" },
-            ])
-          }
-          return Reflect.apply(target, thisArg, args)
-        },
+    Element.prototype.scrollIntoView = new Proxy(Element.prototype.scrollIntoView, {
+      apply: (target, thisArg, args) => {
+        const first = args[0]
+        if (first && typeof first === "object" && first.behavior === "smooth") {
+          return Reflect.apply(target, thisArg, [{ ...first, behavior: "instant" }])
+        }
+        return Reflect.apply(target, thisArg, args)
       },
-    )
+    })
   }, TURNSTILE_VERIFY_STORAGE_KEY)
 }
 

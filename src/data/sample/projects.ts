@@ -91,13 +91,7 @@ export const projectsData: ProjectItem[] = [
     databases: ["MySQL"],
     serverOs: ["Linux"],
     frameworksAndTools: ["React", "Next.js", "Docker", "GitHub"],
-    phases: [
-      "basic_design",
-      "detailed_design",
-      "implementation",
-      "unit_test",
-      "maintenance",
-    ],
+    phases: ["basic_design", "detailed_design", "implementation", "unit_test", "maintenance"],
     responsibilities: {
       ja: "管理画面UIの設計・実装、進捗管理および課題整理サポート",
       en: "Admin UI design and implementation, progress tracking, and issue triage support",

@@ -9,10 +9,7 @@ import {
   Sun,
   Terminal,
 } from "lucide-react"
-import {
-  TURNSTILE_DUMMY_SITE_KEY,
-  TURNSTILE_SCRIPT_URL,
-} from "../data/constants"
+import { TURNSTILE_DUMMY_SITE_KEY, TURNSTILE_SCRIPT_URL } from "../data/constants"
 import { UI_TEXT } from "../data/i18n"
 import styles from "../styles/modules/TurnstileGate.module.css"
 import type { Locale, PortfolioData, ThemeMode } from "../types/portfolio"
@@ -39,8 +36,7 @@ export const TurnstileGate = ({
   const widgetIdRef = useRef<string | null>(null)
   const t = UI_TEXT[locale]
 
-  const siteKey =
-    import.meta.env.VITE_TURNSTILE_SITE_KEY || TURNSTILE_DUMMY_SITE_KEY
+  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || TURNSTILE_DUMMY_SITE_KEY
 
   const verifyToken = useCallback(
     async (token: string) => {
@@ -131,9 +127,7 @@ export const TurnstileGate = ({
       }
     }
 
-    let script = document.querySelector<HTMLScriptElement>(
-      `script[src="${TURNSTILE_SCRIPT_URL}"]`,
-    )
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SCRIPT_URL}"]`)
     const handleLoad = () => {
       renderWidget()
     }
@@ -193,9 +187,7 @@ export const TurnstileGate = ({
             className={styles.iconBtn}
             onClick={onToggleTheme}
             aria-label="Toggle Theme"
-            title={
-              theme === "dark" ? t.switchToLightTitle : t.switchToDarkTitle
-            }
+            title={theme === "dark" ? t.switchToLightTitle : t.switchToDarkTitle}
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -203,10 +195,7 @@ export const TurnstileGate = ({
       </header>
 
       <main className={styles.centerWrap}>
-        <section
-          className={styles.gateCard}
-          aria-labelledby="turnstile-gate-title"
-        >
+        <section className={styles.gateCard} aria-labelledby="turnstile-gate-title">
           <div className={styles.shieldIconWrap} aria-hidden="true">
             <ShieldCheck size={26} />
           </div>
@@ -235,11 +224,7 @@ export const TurnstileGate = ({
                 <AlertCircle size={16} />
                 <span>{t.turnstileError}</span>
               </div>
-              <button
-                type="button"
-                className={styles.retryBtn}
-                onClick={handleRetry}
-              >
+              <button type="button" className={styles.retryBtn} onClick={handleRetry}>
                 <RefreshCw size={14} />
                 <span>{t.turnstileRetryBtn}</span>
               </button>

@@ -13,7 +13,7 @@
     "test:ui": "playwright test",
     "test:ui:update": "playwright test --update-snapshots",
     "lint": "oxlint src infra tests",
-    "fmt": "oxfmt -w src infra tests",
+    "fmt": "oxfmt --write src infra tests",
     "fmt:check": "oxfmt --check src infra tests",
     "knip": "knip",
     "kv:put:remote": "node infra/sync-kv.ts"

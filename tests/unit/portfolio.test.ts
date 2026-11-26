@@ -1,24 +1,11 @@
 import { createElement } from "react"
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react"
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import App from "../../src/App"
 import { Footer } from "../../src/components/Footer"
 import { SkillsSection } from "../../src/components/SkillsSection"
-import {
-  PORTFOLIO_DATA_STORAGE_KEY,
-  TURNSTILE_VERIFY_STORAGE_KEY,
-} from "../../src/data/constants"
-import {
-  portfolioData,
-  samplePortfolioData,
-} from "../../src/data/portfolioData"
+import { PORTFOLIO_DATA_STORAGE_KEY, TURNSTILE_VERIFY_STORAGE_KEY } from "../../src/data/constants"
+import { portfolioData, samplePortfolioData } from "../../src/data/portfolioData"
 import {
   buildProjectPeriod,
   calculateDurationMonths,
@@ -27,16 +14,8 @@ import {
   formatElapsedYearsLabel,
   formatYearMonthSlash,
 } from "../../src/utils/date"
-import {
-  filterProjects,
-  filterSkills,
-  matchesTech,
-} from "../../src/utils/filters"
-import type {
-  PortfolioData,
-  ProjectItem,
-  SkillItem,
-} from "../../src/types/portfolio"
+import { filterProjects, filterSkills, matchesTech } from "../../src/utils/filters"
+import type { PortfolioData, ProjectItem, SkillItem } from "../../src/types/portfolio"
 import type { TurnstileRenderOptions } from "../../src/vite-env"
 
 describe("portfolioData & filter utilities", () => {
@@ -123,20 +102,12 @@ describe("portfolioData & filter utilities", () => {
       },
     ]
 
-    expect(
-      filterProjects(syntheticProjects, { tech: "Java" }).map((p) => p.id),
-    ).toEqual([102])
-    expect(
-      filterProjects(syntheticProjects, { tech: "Go" }).map((p) => p.id),
-    ).toEqual([102])
-    expect(
-      filterProjects(syntheticProjects, { tech: "React" }).map((p) => p.id),
-    ).toEqual([101])
-    expect(
-      filterProjects(syntheticProjects, { tech: "Amazon Linux" }).map(
-        (p) => p.id,
-      ),
-    ).toEqual([101])
+    expect(filterProjects(syntheticProjects, { tech: "Java" }).map((p) => p.id)).toEqual([102])
+    expect(filterProjects(syntheticProjects, { tech: "Go" }).map((p) => p.id)).toEqual([102])
+    expect(filterProjects(syntheticProjects, { tech: "React" }).map((p) => p.id)).toEqual([101])
+    expect(filterProjects(syntheticProjects, { tech: "Amazon Linux" }).map((p) => p.id)).toEqual([
+      101,
+    ])
   })
 
   it("calculates dynamic dates, elapsed years, and project durations accurately across boundary months and JST timezone", () => {
@@ -152,23 +123,15 @@ describe("portfolioData & filter utilities", () => {
     expect(calculateElapsedYears(sampleStartA, utcOct31Late)).toBe(10)
 
     // Boundary month check before and at anniversary month
-    expect(calculateElapsedYears(sampleStartA, { year: 2026, month: 10 })).toBe(
-      9,
-    )
-    expect(calculateElapsedYears(sampleStartA, { year: 2026, month: 11 })).toBe(
-      10,
-    )
+    expect(calculateElapsedYears(sampleStartA, { year: 2026, month: 10 })).toBe(9)
+    expect(calculateElapsedYears(sampleStartA, { year: 2026, month: 11 })).toBe(10)
     expect(formatElapsedYearsLabel(10)).toEqual({
       ja: "10年+",
       en: "10+ yrs",
     })
 
-    expect(calculateElapsedYears(sampleStartB, { year: 2026, month: 5 })).toBe(
-      5,
-    )
-    expect(calculateElapsedYears(sampleStartB, { year: 2026, month: 6 })).toBe(
-      6,
-    )
+    expect(calculateElapsedYears(sampleStartB, { year: 2026, month: 5 })).toBe(5)
+    expect(calculateElapsedYears(sampleStartB, { year: 2026, month: 6 })).toBe(6)
 
     // Verify portfolioData careerStart / freelanceStart have valid YearMonth structure
     expect(portfolioData.careerStart.year).toBeGreaterThanOrEqual(2000)
@@ -179,10 +142,13 @@ describe("portfolioData & filter utilities", () => {
     expect(portfolioData.freelanceStart.month).toBeLessThanOrEqual(12)
 
     // Project period & inclusive month calculation
-    const completed = buildProjectPeriod({ year: 2025, month: 2 }, {
-      year: 2026,
-      month: 3,
-    })
+    const completed = buildProjectPeriod(
+      { year: 2025, month: 2 },
+      {
+        year: 2026,
+        month: 3,
+      },
+    )
     expect(completed).toEqual({
       period: {
         ja: "2025年2月 ～ 2026年3月",
@@ -214,10 +180,13 @@ describe("portfolioData & filter utilities", () => {
 
     // Singular 1 month formatting
     expect(
-      calculateDurationMonths({ year: 2026, month: 5 }, {
-        year: 2026,
-        month: 5,
-      }),
+      calculateDurationMonths(
+        { year: 2026, month: 5 },
+        {
+          year: 2026,
+          month: 5,
+        },
+      ),
     ).toBe(1)
     expect(formatDurationLabel(1)).toEqual({
       ja: "1ヶ月間",
@@ -238,14 +207,8 @@ describe("App component interactions", () => {
     vi.useFakeTimers()
     vi.setSystemTime(fixedDate)
 
-    const expectedTotalYears = calculateElapsedYears(
-      portfolioData.careerStart,
-      fixedDate,
-    )
-    const expectedFreelanceYears = calculateElapsedYears(
-      portfolioData.freelanceStart,
-      fixedDate,
-    )
+    const expectedTotalYears = calculateElapsedYears(portfolioData.careerStart, fixedDate)
+    const expectedFreelanceYears = calculateElapsedYears(portfolioData.freelanceStart, fixedDate)
 
     render(createElement(App))
     expect(screen.getByText("更新日: 2027/07")).toBeInTheDocument()
@@ -256,12 +219,8 @@ describe("App component interactions", () => {
   it("renders hero, specialties, skills, and projects in Japanese by default", () => {
     render(createElement(App))
     expect(screen.getByText(portfolioData.jobTitle.ja)).toBeInTheDocument()
-    expect(
-      screen.getByText(portfolioData.projects[0]!.title.ja),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(portfolioData.projects[1]!.title.ja),
-    ).toBeInTheDocument()
+    expect(screen.getByText(portfolioData.projects[0]!.title.ja)).toBeInTheDocument()
+    expect(screen.getByText(portfolioData.projects[1]!.title.ja)).toBeInTheDocument()
   })
 
   it("renders Footer component with brand name and tech stack credit", () => {
@@ -269,9 +228,7 @@ describe("App component interactions", () => {
     expect(screen.getByText(portfolioData.name.en)).toBeInTheDocument()
     expect(screen.getByText(portfolioData.jobTitle.en)).toBeInTheDocument()
     expect(
-      screen.getByText(
-        "Built with TypeScript, React, Vite, Vitest, Oxlint & Oxfmt",
-      ),
+      screen.getByText("Built with TypeScript, React, Vite, Vitest, Oxlint & Oxfmt"),
     ).toBeInTheDocument()
   })
 
@@ -280,12 +237,8 @@ describe("App component interactions", () => {
     const langBtn = screen.getByRole("button", { name: "Toggle Language" })
     fireEvent.click(langBtn)
 
-    expect(
-      screen.getAllByText(portfolioData.jobTitle.en).length,
-    ).toBeGreaterThanOrEqual(1)
-    expect(
-      screen.getByText(portfolioData.projects[0]!.title.en),
-    ).toBeInTheDocument()
+    expect(screen.getAllByText(portfolioData.jobTitle.en).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText(portfolioData.projects[0]!.title.en)).toBeInTheDocument()
     expect(screen.queryByText("要件定義")).not.toBeInTheDocument()
     expect(screen.queryByText("実装・単体")).not.toBeInTheDocument()
 
@@ -294,9 +247,7 @@ describe("App component interactions", () => {
     fireEvent.click(resumeButtons[0]!)
     expect(screen.queryByText("要件定義")).not.toBeInTheDocument()
     expect(screen.queryByText("実装・単体")).not.toBeInTheDocument()
-    expect(screen.getAllByText("Implementation").length).toBeGreaterThanOrEqual(
-      1,
-    )
+    expect(screen.getAllByText("Implementation").length).toBeGreaterThanOrEqual(1)
   })
 
   it("toggles between interactive portfolio view and resume sheet print view", () => {
@@ -306,17 +257,13 @@ describe("App component interactions", () => {
 
     expect(screen.getByText("経歴・スキルシート")).toBeInTheDocument()
     expect(
-      screen.getByText(
-        `【業務経歴詳細（全${portfolioData.projects.length}案件）】`,
-      ),
+      screen.getByText(`【業務経歴詳細（全${portfolioData.projects.length}案件）】`),
     ).toBeInTheDocument()
   })
 
   it("filters projects when a role filter button is clicked", () => {
     const pmProject = portfolioData.projects.find((p) => p.roles.includes("PM"))
-    const nonPmProject = portfolioData.projects.find(
-      (p) => !p.roles.includes("PM"),
-    )
+    const nonPmProject = portfolioData.projects.find((p) => !p.roles.includes("PM"))
     expect(pmProject).toBeDefined()
     expect(nonPmProject).toBeDefined()
 
@@ -332,16 +279,12 @@ describe("App component interactions", () => {
     render(createElement(App))
     const menuBtn = screen.getByRole("button", { name: "Toggle Menu" })
     expect(menuBtn).toHaveAttribute("aria-expanded", "false")
-    expect(
-      screen.queryByRole("dialog", { name: "Mobile Navigation" }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "Mobile Navigation" })).not.toBeInTheDocument()
 
     // Open mobile menu
     fireEvent.click(menuBtn)
     expect(menuBtn).toHaveAttribute("aria-expanded", "true")
-    expect(
-      screen.getByRole("dialog", { name: "Mobile Navigation" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole("dialog", { name: "Mobile Navigation" })).toBeInTheDocument()
 
     // Click mobile nav link and verify menu closes
     const mobileNavLinks = screen.getByRole("navigation", {
@@ -351,17 +294,13 @@ describe("App component interactions", () => {
     expect(firstLink).not.toBeNull()
     fireEvent.click(firstLink!)
     expect(menuBtn).toHaveAttribute("aria-expanded", "false")
-    expect(
-      screen.queryByRole("dialog", { name: "Mobile Navigation" }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "Mobile Navigation" })).not.toBeInTheDocument()
   })
 
   it("opens and closes the QR code share modal with download links", () => {
     render(createElement(App))
     const qrBtn = screen.getByRole("button", { name: "Open QR Code Modal" })
-    expect(
-      screen.queryByRole("dialog", { name: "QR Code Modal" }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "QR Code Modal" })).not.toBeInTheDocument()
 
     fireEvent.click(qrBtn)
     const modal = screen.getByRole("dialog", { name: "QR Code Modal" })
@@ -370,19 +309,13 @@ describe("App component interactions", () => {
 
     const closeBtn = screen.getByRole("button", { name: "閉じる" })
     fireEvent.click(closeBtn)
-    expect(
-      screen.queryByRole("dialog", { name: "QR Code Modal" }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "QR Code Modal" })).not.toBeInTheDocument()
 
     // Re-open and close with Escape key
     fireEvent.click(qrBtn)
-    expect(
-      screen.getByRole("dialog", { name: "QR Code Modal" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole("dialog", { name: "QR Code Modal" })).toBeInTheDocument()
     fireEvent.keyDown(document, { key: "Escape" })
-    expect(
-      screen.queryByRole("dialog", { name: "QR Code Modal" }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "QR Code Modal" })).not.toBeInTheDocument()
   })
 
   it("includes serverOs options in the project tech filter select and keeps non-exact skill selections visible", () => {
@@ -392,9 +325,7 @@ describe("App component interactions", () => {
     }) as HTMLSelectElement
 
     const firstOs = portfolioData.projects[0]!.serverOs[0]!
-    expect(
-      Array.from(techSelect.options).some((option) => option.value === firstOs),
-    ).toBe(true)
+    expect(Array.from(techSelect.options).some((option) => option.value === firstOs)).toBe(true)
 
     fireEvent.change(techSelect, { target: { value: firstOs } })
     expect(techSelect.value).toBe(firstOs)
@@ -422,25 +353,17 @@ describe("App component interactions", () => {
 
     render(createElement(App))
 
-    expect(
-      screen.getByRole("heading", { name: "セキュリティ確認" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "セキュリティ確認" })).toBeInTheDocument()
     expect(screen.getByText("Portfolio")).toBeInTheDocument()
     expect(screen.getByText("Security Gate")).toBeInTheDocument()
-    expect(
-      screen.queryByText(samplePortfolioData.brandName),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(samplePortfolioData.brandName)).not.toBeInTheDocument()
     expect(document.title).toBe("Portfolio & Skill Sheet")
-    expect(
-      screen.queryByText(portfolioData.projects[0]!.title.ja),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(portfolioData.projects[0]!.title.ja)).not.toBeInTheDocument()
 
     // Switch language on the gate screen
     const langBtn = screen.getByRole("button", { name: "Toggle Language" })
     fireEvent.click(langBtn)
-    expect(
-      screen.getByRole("heading", { name: "Security Verification" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Security Verification" })).toBeInTheDocument()
 
     // Simulate Turnstile widget issuing a token
     expect(capturedOptions?.callback).toBeDefined()
@@ -449,13 +372,9 @@ describe("App component interactions", () => {
     })
 
     await waitFor(() => {
-      expect(
-        screen.getByText(portfolioData.projects[0]!.title.en),
-      ).toBeInTheDocument()
+      expect(screen.getByText(portfolioData.projects[0]!.title.en)).toBeInTheDocument()
     })
-    expect(window.sessionStorage.getItem(TURNSTILE_VERIFY_STORAGE_KEY)).toBe(
-      "true",
-    )
+    expect(window.sessionStorage.getItem(TURNSTILE_VERIFY_STORAGE_KEY)).toBe("true")
   })
 
   it("renders portfolioData returned by Worker KV upon Turnstile verification and caches it in sessionStorage", async () => {
@@ -484,13 +403,10 @@ describe("App component interactions", () => {
     }
 
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response(
-        JSON.stringify({ verified: true, portfolioData: remoteData }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        },
-      ),
+      new Response(JSON.stringify({ verified: true, portfolioData: remoteData }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
     )
 
     render(createElement(App))
@@ -503,9 +419,7 @@ describe("App component interactions", () => {
       expect(screen.getByText("KV配信案件テスト")).toBeInTheDocument()
     })
     expect(screen.getByText("KV テストユーザー")).toBeInTheDocument()
-    expect(window.sessionStorage.getItem(PORTFOLIO_DATA_STORAGE_KEY)).toContain(
-      "KV配信案件テスト",
-    )
+    expect(window.sessionStorage.getItem(PORTFOLIO_DATA_STORAGE_KEY)).toContain("KV配信案件テスト")
   })
 
   it("shows error alert and retry button when Turnstile verification fails", async () => {
@@ -559,10 +473,7 @@ describe("App component interactions", () => {
     }
 
     window.sessionStorage.setItem(TURNSTILE_VERIFY_STORAGE_KEY, "true")
-    window.sessionStorage.setItem(
-      PORTFOLIO_DATA_STORAGE_KEY,
-      JSON.stringify(cachedData),
-    )
+    window.sessionStorage.setItem(PORTFOLIO_DATA_STORAGE_KEY, JSON.stringify(cachedData))
 
     const fetchSpy = vi.spyOn(globalThis, "fetch")
 
@@ -671,14 +582,8 @@ describe("App component interactions", () => {
   })
 
   it("does not show copied state in QrCodeModal when both clipboard API and execCommand fail", async () => {
-    const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(
-      navigator,
-      "clipboard",
-    )
-    const originalExecCommandDescriptor = Object.getOwnPropertyDescriptor(
-      document,
-      "execCommand",
-    )
+    const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, "clipboard")
+    const originalExecCommandDescriptor = Object.getOwnPropertyDescriptor(document, "execCommand")
 
     Object.defineProperty(navigator, "clipboard", {
       value: {
@@ -702,25 +607,15 @@ describe("App component interactions", () => {
       })
 
       expect(screen.queryByText("コピー済み")).not.toBeInTheDocument()
-      expect(
-        screen.getByRole("button", { name: "URLをコピー" }),
-      ).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "URLをコピー" })).toBeInTheDocument()
     } finally {
       if (originalClipboardDescriptor) {
-        Object.defineProperty(
-          navigator,
-          "clipboard",
-          originalClipboardDescriptor,
-        )
+        Object.defineProperty(navigator, "clipboard", originalClipboardDescriptor)
       } else {
         Reflect.deleteProperty(navigator, "clipboard")
       }
       if (originalExecCommandDescriptor) {
-        Object.defineProperty(
-          document,
-          "execCommand",
-          originalExecCommandDescriptor,
-        )
+        Object.defineProperty(document, "execCommand", originalExecCommandDescriptor)
       } else {
         Reflect.deleteProperty(document, "execCommand")
       }

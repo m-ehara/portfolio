@@ -38,9 +38,7 @@ const main = async (): Promise<void> => {
   }
 
   const outputPath = path.resolve(rootDir, OUTPUT_RELATIVE_PATH)
-  const hasPrivateProfile = existsSync(
-    path.resolve(rootDir, "src/data/private/profile.ts"),
-  )
+  const hasPrivateProfile = existsSync(path.resolve(rootDir, "src/data/private/profile.ts"))
 
   const server = await createServer({
     root: rootDir,
@@ -54,18 +52,14 @@ const main = async (): Promise<void> => {
       portfolioData?: unknown
     }
     if (!mod.portfolioData) {
-      throw new Error(
-        "Failed to load portfolioData from src/data/portfolioData.ts",
-      )
+      throw new Error("Failed to load portfolioData from src/data/portfolioData.ts")
     }
 
     const serialized = `${JSON.stringify(mod.portfolioData, null, 2)}\n`
     await mkdir(path.dirname(outputPath), { recursive: true })
     await writeFile(outputPath, serialized, "utf8")
 
-    const sourceLabel = hasPrivateProfile
-      ? "src/data/private/*"
-      : "src/data/sample/*"
+    const sourceLabel = hasPrivateProfile ? "src/data/private/*" : "src/data/sample/*"
     console.log(
       `Exported ${sourceLabel} -> ${OUTPUT_RELATIVE_PATH} (${Buffer.byteLength(serialized, "utf8")} bytes)`,
     )

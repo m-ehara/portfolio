@@ -16,9 +16,7 @@ export const Footer = ({ data = portfolioData }: FooterProps) => {
           <span>{data.jobTitle.en}</span>
         </div>
         <div className={styles.footerRight}>
-          <span>
-            Built with TypeScript, React, Vite, Vitest, Oxlint &amp; Oxfmt
-          </span>
+          <span>Built with TypeScript, React, Vite, Vitest, Oxlint &amp; Oxfmt</span>
         </div>
       </div>
     </footer>

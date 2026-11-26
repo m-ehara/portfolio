@@ -19,24 +19,16 @@ describe("Cloudflare Worker Basic Authentication", () => {
     expect(await verifyBasicAuth(validHeader, "admin", "wrong")).toBe(false)
     expect(await verifyBasicAuth(validHeader, "wrong", "secret123")).toBe(false)
     expect(await verifyBasicAuth(null, "admin", "secret123")).toBe(false)
-    expect(await verifyBasicAuth("Bearer token", "admin", "secret123")).toBe(
-      false,
-    )
+    expect(await verifyBasicAuth("Bearer token", "admin", "secret123")).toBe(false)
 
     const utf8Bytes = new TextEncoder().encode("管理者:秘密のパス123")
-    const utf8Binary = Array.from(utf8Bytes, (b) =>
-      String.fromCharCode(b),
-    ).join("")
+    const utf8Binary = Array.from(utf8Bytes, (b) => String.fromCharCode(b)).join("")
     const utf8Header = `Basic ${btoa(utf8Binary)}`
-    expect(await verifyBasicAuth(utf8Header, "管理者", "秘密のパス123")).toBe(
-      true,
-    )
+    expect(await verifyBasicAuth(utf8Header, "管理者", "秘密のパス123")).toBe(true)
     expect(await verifyBasicAuth(utf8Header, "管理者", "wrong")).toBe(false)
 
     const invalidUtf8Header = `Basic ${btoa("\xff\xfe:pass")}`
-    expect(await verifyBasicAuth(invalidUtf8Header, "\xff\xfe", "pass")).toBe(
-      false,
-    )
+    expect(await verifyBasicAuth(invalidUtf8Header, "\xff\xfe", "pass")).toBe(false)
   })
 
   it("returns 401 with WWW-Authenticate header when Authorization header is missing or invalid", async () => {
@@ -60,9 +52,7 @@ describe("Cloudflare Worker Basic Authentication", () => {
   it("returns 200 and serves static assets with security headers when valid Basic Auth credentials are provided", async () => {
     const env: Env = {
       ASSETS: {
-        fetch: vi
-          .fn()
-          .mockResolvedValue(new Response("Portfolio HTML", { status: 200 })),
+        fetch: vi.fn().mockResolvedValue(new Response("Portfolio HTML", { status: 200 })),
       },
       BASIC_AUTH_USER: "admin",
       BASIC_AUTH_PASS: "secret123",
@@ -126,18 +116,15 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       }),
     )
 
-    const req = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-          "CF-Connecting-IP": "203.0.113.10",
-        },
-        body: JSON.stringify({ token: "valid-turnstile-token" }),
+    const req = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
+        "CF-Connecting-IP": "203.0.113.10",
       },
-    )
+      body: JSON.stringify({ token: "valid-turnstile-token" }),
+    })
 
     const res = await workerHandler.fetch(req, baseEnv)
     expect(res.status).toBe(200)
@@ -160,17 +147,14 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       ),
     )
 
-    const req = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: "invalid-token" }),
+    const req = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify({ token: "invalid-token" }),
+    })
 
     const res = await workerHandler.fetch(req, baseEnv)
     expect(res.status).toBe(403)
@@ -182,45 +166,36 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
   })
 
   it("returns 400 when token is missing or JSON is malformed", async () => {
-    const emptyTokenReq = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: "   " }),
+    const emptyTokenReq = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify({ token: "   " }),
+    })
     const emptyRes = await workerHandler.fetch(emptyTokenReq, baseEnv)
     expect(emptyRes.status).toBe(400)
 
-    const badJsonReq = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: "{bad-json",
+    const badJsonReq = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
+      body: "{bad-json",
+    })
     const badJsonRes = await workerHandler.fetch(badJsonReq, baseEnv)
     expect(badJsonRes.status).toBe(400)
   })
 
   it("returns 405 Method Not Allowed for non-POST requests", async () => {
-    const getReq = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "GET",
-        headers: {
-          Authorization: validAuthHeader,
-        },
+    const getReq = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "GET",
+      headers: {
+        Authorization: validAuthHeader,
       },
-    )
+    })
     const res = await workerHandler.fetch(getReq, baseEnv)
     expect(res.status).toBe(405)
     expect(res.headers.get("Allow")).toBe("POST")
@@ -253,17 +228,14 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       }),
     )
 
-    const req = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: "valid-token" }),
+    const req = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify({ token: "valid-token" }),
+    })
 
     const res = await workerHandler.fetch(req, envWithKv)
     expect(res.status).toBe(200)
@@ -287,17 +259,14 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       BASIC_AUTH_PASS: "secret123",
     }
 
-    const req = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: "valid-token" }),
+    const req = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify({ token: "valid-token" }),
+    })
 
     const res = await workerHandler.fetch(req, envWithoutTurnstileSecret)
     expect(res.status).toBe(500)
@@ -345,14 +314,11 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       PORTFOLIO_KV: { get: kvGetMock },
     }
 
-    const unauthReq = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: "valid-token" }),
-      },
-    )
+    const unauthReq = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: "valid-token" }),
+    })
     const unauthRes = await workerHandler.fetch(unauthReq, envWithKv)
     expect(unauthRes.status).toBe(401)
     expect(kvGetMock).not.toHaveBeenCalled()
@@ -370,21 +336,15 @@ describe("Cloudflare Turnstile Siteverify API (/api/turnstile/verify)", () => {
       ),
     )
 
-    const failedVerifyReq = new Request(
-      "https://portfolio.example.com/api/turnstile/verify",
-      {
-        method: "POST",
-        headers: {
-          Authorization: validAuthHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: "invalid-token" }),
+    const failedVerifyReq = new Request("https://portfolio.example.com/api/turnstile/verify", {
+      method: "POST",
+      headers: {
+        Authorization: validAuthHeader,
+        "Content-Type": "application/json",
       },
-    )
-    const failedVerifyRes = await workerHandler.fetch(
-      failedVerifyReq,
-      envWithKv,
-    )
+      body: JSON.stringify({ token: "invalid-token" }),
+    })
+    const failedVerifyRes = await workerHandler.fetch(failedVerifyReq, envWithKv)
     expect(failedVerifyRes.status).toBe(403)
     const failedPayload = (await failedVerifyRes.json()) as {
       verified: boolean

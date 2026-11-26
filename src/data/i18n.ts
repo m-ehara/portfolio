@@ -33,8 +33,7 @@ export const UI_TEXT = {
     rankFilter5Plus: "5年以上",
     rankFilter3Plus: "3年以上",
     rankFilter1Plus: "1年以上",
-    clickSkillHint:
-      "スキルをクリックすると、該当スキルを使用した案件実績に絞り込めます",
+    clickSkillHint: "スキルをクリックすると、該当スキルを使用した案件実績に絞り込めます",
     projectsTitlePrefix: "プロジェクト実績（",
     projectsTitleSuffix: "件）",
     projectsSub: "PROJECT EXPERIENCE & TRACK RECORD",
@@ -85,8 +84,7 @@ export const UI_TEXT = {
     noMatchingProjects: "条件に一致する案件が見つかりませんでした。",
     qrShareBtn: "QR共有",
     qrModalTitle: "QRコードでポートフォリオを共有",
-    qrModalSub:
-      "スマートフォン等のカメラで読み取るとポートフォリオにアクセスできます",
+    qrModalSub: "スマートフォン等のカメラで読み取るとポートフォリオにアクセスできます",
     copyUrlBtn: "URLをコピー",
     copiedUrlLabel: "コピー済み",
     downloadPngBtn: "PNG保存",
@@ -135,8 +133,7 @@ export const UI_TEXT = {
     rankFilter5Plus: "5+ yrs",
     rankFilter3Plus: "3+ yrs",
     rankFilter1Plus: "1+ yr",
-    clickSkillHint:
-      "Click any skill badge to filter projects using that technology",
+    clickSkillHint: "Click any skill badge to filter projects using that technology",
     projectsTitlePrefix: "Project Track Record (",
     projectsTitleSuffix: ")",
     projectsSub: "PROJECT EXPERIENCE & TRACK RECORD",

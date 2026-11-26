@@ -7,23 +7,13 @@ import { ProjectsSection } from "./components/ProjectsSection"
 import { ResumeSheetView } from "./components/ResumeSheetView"
 import { SkillsSection } from "./components/SkillsSection"
 import { TurnstileGate } from "./components/TurnstileGate"
-import {
-  PORTFOLIO_DATA_STORAGE_KEY,
-  TURNSTILE_VERIFY_STORAGE_KEY,
-} from "./data/constants"
+import { PORTFOLIO_DATA_STORAGE_KEY, TURNSTILE_VERIFY_STORAGE_KEY } from "./data/constants"
 import { parsePortfolioData, portfolioData } from "./data/portfolioData"
-import type {
-  Locale,
-  PortfolioData,
-  ThemeMode,
-  ViewMode,
-} from "./types/portfolio"
+import type { Locale, PortfolioData, ThemeMode, ViewMode } from "./types/portfolio"
 
 const getInitialTurnstileVerified = (): boolean => {
   try {
-    return (
-      window.sessionStorage.getItem(TURNSTILE_VERIFY_STORAGE_KEY) === "true"
-    )
+    return window.sessionStorage.getItem(TURNSTILE_VERIFY_STORAGE_KEY) === "true"
   } catch {
     return false
   }
@@ -44,10 +34,7 @@ const readCachedPortfolioData = (): PortfolioData | null => {
 
 const persistPortfolioData = (value: PortfolioData): void => {
   try {
-    window.sessionStorage.setItem(
-      PORTFOLIO_DATA_STORAGE_KEY,
-      JSON.stringify(value),
-    )
+    window.sessionStorage.setItem(PORTFOLIO_DATA_STORAGE_KEY, JSON.stringify(value))
   } catch {
     // Ignore sessionStorage quota or access errors
   }
@@ -69,9 +56,7 @@ const App = () => {
   const [isTurnstileVerified, setIsTurnstileVerified] = useState<boolean>(
     getInitialTurnstileVerified,
   )
-  const [data, setData] = useState<PortfolioData>(
-    () => readCachedPortfolioData() ?? portfolioData,
-  )
+  const [data, setData] = useState<PortfolioData>(() => readCachedPortfolioData() ?? portfolioData)
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)

@@ -5,10 +5,7 @@ import type {
   RoleExperience,
   SpecialtyItem,
 } from "../../types/portfolio"
-import {
-  DEFAULT_PORTFOLIO_QR_SVG_PATH,
-  DEFAULT_PORTFOLIO_URL,
-} from "../constants"
+import { DEFAULT_PORTFOLIO_QR_SVG_PATH, DEFAULT_PORTFOLIO_URL } from "../constants"
 
 export const profileInfo: ProfileInfo = {
   name: {
