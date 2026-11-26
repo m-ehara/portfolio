@@ -39,5 +39,13 @@ test.describe("Portfolio Visual Regression Tests - Skill Sheet & Print View", ()
       fullPage: true,
       animations: "disabled",
     })
+
+    // Switch back to screen media and English locale to verify translated phase labels in resume view
+    await page.emulateMedia({ media: "screen" })
+    await page.getByRole("button", { name: "Toggle Language" }).click()
+    await expect(page.getByText("Curriculum Vitae & Skill Sheet")).toBeVisible()
+    await expect(page.getByText("要件定義")).toHaveCount(0)
+    await expect(page.getByText("実装・単体")).toHaveCount(0)
+    await expect(page.getByText("Implementation").first()).toBeVisible()
   })
 })
