@@ -105,7 +105,9 @@ TypeScript による堅牢な設計、コンポーネント指向、CSS Modules 
 ├── tests/                     # テストスイート（規約上すべてのテストファイルは *.ts）
 │   ├── unit/                  # 単体テスト (Vitest)
 │   │   ├── setup.ts           # Vitest セットアップ
-│   │   ├── portfolio.test.ts  # フロントエンドUI・フィルタ・日付計算単体テスト
+│   │   ├── portfolio.test.ts  # データ整合性・フィルタ・日付計算単体テスト
+│   │   ├── app.test.ts        # UIインタラクション・状態遷移・異常系単体テスト
+│   │   ├── turnstile.test.ts  # Turnstile認証ゲート・Worker KVキャッシュ単体テスト
 │   │   └── worker.test.ts     # Cloudflare Worker 認証・Turnstile siteverify 単体テスト
 │   └── vrt/                   # ビジュアルリグレッションテスト (Playwright)
 │       ├── helper.ts          # VRT 安定化処理・フック
@@ -198,7 +200,12 @@ pnpm run kv:put:remote
 - **`tests/unit/portfolio.test.ts`**:
   - 全案件データの整合性、スキル・案件の複合フィルタロジック
   - JST 準拠の日付計算（うるう年・月境界・タイムゾーン境界での年数/月数計算）
-  - 言語切替、テーマ切替、QR モーダル開閉、Turnstile ゲート画面のトークン発行・検証遷移
+- **`tests/unit/app.test.ts`**:
+  - 時刻経過による年数・更新日時の動的更新、モバイルメニュー/QRモーダルの開閉遷移（Escape キー含む）
+  - 技術選択時のスクロール発火制御（解除時はスクロールしない）、前方一致スキル厳密判定、クリップボード API 失敗時の異常系
+- **`tests/unit/turnstile.test.ts`**:
+  - 未検証時の `TurnstileGate` 描画とデータ秘匿、Turnstile トークン検証成功時の Worker KV データ反映と `sessionStorage` キャッシュ
+  - 検証失敗時のエラーアラート・再試行リセット、リロード時の `sessionStorage` 復元
 - **`tests/unit/worker.test.ts`**:
   - Basic 認証の暗号検証（正常認証、不一致、欠落時の 401、未設定時のフェイルクローズ 500）
   - Turnstile `POST /api/turnstile/verify` のサーバー側 `siteverify` 検証（成功 200、不正 403、パラメータ欠落 400）

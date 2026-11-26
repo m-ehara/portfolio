@@ -3,7 +3,9 @@
 ## 1. テストファイルを `.ts` に統一する理由と実装パターン
 本リポジトリでは、`tests/` 配下のすべてのファイルを `.ts` 拡張子に統一しています：
 - `tests/unit/setup.ts`: `@testing-library/jest-dom/vitest` を読み込み、DOM マッチャー（`.toBeInTheDocument()` 等）を有効化します。
-- `tests/unit/portfolio.test.ts`: データ整合性、`filterSkills` / `filterProjects`、および `App` コンポーネントのUI操作テスト（Vitest: `*.test.ts`）。`src/data/private/` の有無にかかわらず（`src/data/sample/` フォールバック環境でも）全テストがパスするよう、`portfolioData` の動的参照を用いて検証します。
+- `tests/unit/portfolio.test.ts`: データ整合性、`filterSkills` / `filterProjects`、および JST 準拠の日付・期間計算ロジックの単体テスト（Vitest: `*.test.ts`）。`src/data/private/` の有無にかかわらず（`src/data/sample/` フォールバック環境でも）全テストがパスするよう、`portfolioData` の動的参照を用いて検証します。
+- `tests/unit/app.test.ts`: `App` コンポーネントのUIインタラクション・状態遷移・異常系（時刻境界、メニュー/モーダル開閉、スクロール副作用制御、クリップボードAPI失敗時等）の単体テスト（Vitest: `*.test.ts`）。
+- `tests/unit/turnstile.test.ts`: `TurnstileGate` の検証フロー、Worker KV データ配信、および `sessionStorage` キャッシュ復元の単体テスト（Vitest: `*.test.ts`）。
 - `tests/unit/worker.test.ts`: Cloudflare Worker の Basic 認証（`verifyBasicAuth`）、Turnstile 検証（`verifyTurnstileToken` / `POST /api/turnstile/verify`）、および検証成功時の `PORTFOLIO_KV` 配信の単体テスト（Vitest: `*.test.ts`）。
 - `tests/vrt/*.spec.ts`: Playwright によるビジュアルリグレッションテスト（`desktop.spec.ts`, `mobile.spec.ts`, `print.spec.ts` および `tests/vrt/helper.ts`）。生成されるスナップショット画像（`tests/vrt/snapshots/`）は `.gitignore` によりバージョン管理対象外としています。
 

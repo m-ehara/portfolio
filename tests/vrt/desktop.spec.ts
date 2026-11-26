@@ -14,6 +14,9 @@ test.describe("Portfolio Visual Regression Tests - Desktop Viewport", () => {
     await expect(page.locator("#about")).toBeVisible()
     await expect(page.locator("#skills")).toBeVisible()
     await expect(page.locator("#projects")).toBeVisible()
+    await expect(page.locator("footer")).toContainText(
+      "Built with TypeScript, React, Vite, Vitest, Oxlint & Oxfmt",
+    )
 
     const fontSizeBase = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--font-size-base").trim(),

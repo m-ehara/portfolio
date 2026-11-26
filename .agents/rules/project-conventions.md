@@ -28,6 +28,6 @@ description: Core architecture, tooling, and coding conventions for the my-portf
   - グローバル共通トークン・ベース定義は `src/styles/variables.css`（`1rem = 16px` 標準のまま、タイポグラフィ `--font-size-*`、余白 `--space-*`、角丸 `--radius-*`、カラーテーマ変数を定義）、`src/styles/base.css` に配置し、各コンポーネント固有のスタイルは CSS Modules（`src/styles/modules/*.module.css`）＋ ネイティブ CSS Nesting で記述する。
 - **テストファイル規約（`tests/`）**:
   - **すべてのテストファイルの拡張子は `.ts` に統一する**。`.tsx` のテストファイルは作成しないこと。
-  - 単体テスト（Vitest: `pnpm test`）は `tests/unit/*.test.ts`（`portfolio.test.ts`, `worker.test.ts`）、E2E・ビジュアルリグレッションテスト（Playwright: `pnpm run test:ui`）は `tests/vrt/*.spec.ts`（`desktop.spec.ts`, `mobile.spec.ts`, `print.spec.ts`）として命名・分離する。
+  - 単体テスト（Vitest: `pnpm test`）は `tests/unit/*.test.ts`（`portfolio.test.ts`, `app.test.ts`, `turnstile.test.ts`, `worker.test.ts`）、E2E・ビジュアルリグレッションテスト（Playwright: `pnpm run test:ui`）は `tests/vrt/*.spec.ts`（`desktop.spec.ts`, `mobile.spec.ts`, `print.spec.ts`）として命名・分離する。
   - VRT で生成されるスナップショット画像（`tests/vrt/snapshots/`）およびレポートはリポジトリサイズ抑制のため `.gitignore` でバージョン管理対象外とする。
   - `.ts` ファイル内では JSX の山括弧構文（`<App />`）が型アサーションと解釈され構文エラーになるため、React コンポーネントの描画には必ず `import { createElement } from "react"` の `createElement(Component, props)` を使用すること。
