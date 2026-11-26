@@ -59,8 +59,7 @@ export const ProjectsSection = ({
     [projects, roleFilter, selectedTech, query],
   )
 
-  const hasActiveFilters =
-    roleFilter !== "all" || selectedTech !== "all" || query.trim() !== ""
+  const hasActiveFilters = roleFilter !== "all" || selectedTech !== "all" || query.trim() !== ""
 
   const handleReset = () => {
     setRoleFilter("all")
@@ -80,11 +79,7 @@ export const ProjectsSection = ({
 
         {/* Filters */}
         <div className={styles.projectsFilterBar}>
-          <div
-            className={styles.rolePills}
-            role="group"
-            aria-label={t.roleFilterLabel}
-          >
+          <div className={styles.rolePills} role="group" aria-label={t.roleFilterLabel}>
             {["all", "PM", "PMO", "SE"].map((role) => (
               <button
                 key={role}
@@ -119,10 +114,9 @@ export const ProjectsSection = ({
               aria-label={t.techFilterLabel}
             >
               <option value="all">{t.allTechs}</option>
-              {selectedTech !== "all" &&
-                !allTechOptions.includes(selectedTech) && (
-                  <option value={selectedTech}>{selectedTech}</option>
-                )}
+              {selectedTech !== "all" && !allTechOptions.includes(selectedTech) && (
+                <option value={selectedTech}>{selectedTech}</option>
+              )}
               {allTechOptions.map((tech) => (
                 <option key={tech} value={tech}>
                   {tech}
@@ -131,11 +125,7 @@ export const ProjectsSection = ({
             </select>
 
             {hasActiveFilters && (
-              <button
-                type="button"
-                className={styles.resetBtn}
-                onClick={handleReset}
-              >
+              <button type="button" className={styles.resetBtn} onClick={handleReset}>
                 <RotateCcw size={14} />
                 <span>{t.clearFilters}</span>
               </button>
@@ -145,8 +135,7 @@ export const ProjectsSection = ({
 
         <div className={styles.projectsCountBar}>
           <span>
-            <strong>{filteredProjects.length}</strong> / {projects.length}{" "}
-            {t.showingProjects}
+            <strong>{filteredProjects.length}</strong> / {projects.length} {t.showingProjects}
           </span>
           {selectedTech !== "all" && (
             <span className={styles.activeFilterTag}>
@@ -167,9 +156,7 @@ export const ProjectsSection = ({
                       #{String(project.id).padStart(2, "0")}
                     </span>
                     <div>
-                      <h3 className={styles.projectTitle}>
-                        {project.title[locale]}
-                      </h3>
+                      <h3 className={styles.projectTitle}>{project.title[locale]}</h3>
                       <div className={styles.projectPeriodRow}>
                         <span className={styles.projectPeriod}>
                           <Calendar size={14} />
@@ -187,9 +174,7 @@ export const ProjectsSection = ({
                       {project.roles.map((r) => (
                         <span
                           key={r}
-                          className={`${styles.projectRoleBadge} ${
-                            ROLE_BADGE_CLASS[r] ?? ""
-                          }`}
+                          className={`${styles.projectRoleBadge} ${ROLE_BADGE_CLASS[r] ?? ""}`}
                         >
                           <Briefcase size={13} />
                           <span>{r}</span>
@@ -199,20 +184,14 @@ export const ProjectsSection = ({
 
                     <div className={styles.teamSizeBadge}>
                       <Users size={14} />
-                      <span>
-                        {formatTeamSizeItems(project.teamSize, locale).join(
-                          " / ",
-                        )}
-                      </span>
+                      <span>{formatTeamSizeItems(project.teamSize, locale).join(" / ")}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Assigned Phases Pipeline */}
                 <div className={styles.projectPhasesRow}>
-                  <span className={styles.rowLabel}>
-                    {t.phasesAssignedLabel}:
-                  </span>
+                  <span className={styles.rowLabel}>{t.phasesAssignedLabel}:</span>
                   <div className={styles.phasesPipeline}>
                     {PROJECT_PHASES.map((phase) => {
                       const active = project.phases.includes(phase.key)
@@ -257,18 +236,12 @@ export const ProjectsSection = ({
                 {/* Details Grid */}
                 <div className={styles.projectDetailsGrid}>
                   <div>
-                    <h4 className={styles.detailHeading}>
-                      {t.responsibilitiesLabel}
-                    </h4>
-                    <p className={styles.detailText}>
-                      {project.responsibilities[locale]}
-                    </p>
+                    <h4 className={styles.detailHeading}>{t.responsibilitiesLabel}</h4>
+                    <p className={styles.detailText}>{project.responsibilities[locale]}</p>
 
                     {project.acquiredSkills.length > 0 && (
                       <>
-                        <h4
-                          className={`${styles.detailHeading} ${styles.mtSm}`}
-                        >
+                        <h4 className={`${styles.detailHeading} ${styles.mtSm}`}>
                           <Award size={14} />
                           <span>{t.acquiredSkillsLabel}</span>
                         </h4>
@@ -283,9 +256,7 @@ export const ProjectsSection = ({
 
                   <div>
                     <h4 className={styles.detailHeading}>{t.commentLabel}</h4>
-                    <p className={styles.detailText}>
-                      {project.comment[locale]}
-                    </p>
+                    <p className={styles.detailText}>{project.comment[locale]}</p>
 
                     {project.evaluation && (
                       <div className={styles.evaluationBox}>
@@ -293,9 +264,7 @@ export const ProjectsSection = ({
                           <MessageSquareQuote size={15} />
                           <span>{t.evaluationLabel}</span>
                         </div>
-                        <p className={styles.evaluationText}>
-                          {project.evaluation[locale]}
-                        </p>
+                        <p className={styles.evaluationText}>{project.evaluation[locale]}</p>
                       </div>
                     )}
                   </div>

@@ -1,0 +1,23 @@
+supportedArchitectures:
+  os:
+    - darwin
+    - linux
+  cpu:
+    - arm64
+    - x64
+
+# サプライチェーン攻撃対策（ビルドスクリプトの3分類管理）:
+# pnpm v11/v12 ではデフォルトで未承認スクリプトの厳格チェックが有効であり、
+# allowBuilds に未登録（未分類）のライフサイクルスクリプト（preinstall / install / postinstall）が
+# 存在すると ERR_PNPM_IGNORED_BUILDS（終了コード 1）でインストールが失敗する。
+#
+# - true  (許可): ネイティブバインディングのビルドなど、スクリプト実行が必須かつ安全性を確認済みのもの
+# - false (無視): プリビルトバイナリが配布済み等でスクリプト実行が不要と判断したもの
+# - 未記載 (未分類): 未評価のパッケージ（新規追加時にエラーで検知し、精査後に true / false を記録する）
+allowBuilds:
+  # optionalDependencies（@esbuild/<os>-<cpu>）でプリビルトバイナリが配置済みであり、
+  # Vite / Wrangler からは lib/main.js 経由で直接バイナリが解決されるため postinstall (install.js) の実行は不要
+  esbuild: false
+  # optionalDependencies（@cloudflare/workerd-<os>-<cpu>）でプリビルトバイナリが配置済みであり、
+  # Wrangler からは lib/main.js 経由で直接バイナリが解決されるため postinstall (install.js) の実行は不要
+  workerd: false

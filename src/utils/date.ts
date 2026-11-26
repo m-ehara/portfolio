@@ -29,12 +29,7 @@ const JST_YEAR_MONTH_FORMATTER = new Intl.DateTimeFormat("en-US", {
  * 日本時間（JST）基準の「年」と「月（1〜12）」を抽出する。
  */
 const getCurrentYearMonth = (reference?: TimeReference): YearMonth => {
-  if (
-    reference &&
-    typeof reference === "object" &&
-    "year" in reference &&
-    "month" in reference
-  ) {
+  if (reference && typeof reference === "object" && "year" in reference && "month" in reference) {
     return { year: reference.year, month: reference.month }
   }
 
@@ -60,12 +55,8 @@ export const formatYearMonthSlash = (reference?: TimeReference): string => {
  * 開始年月から基準時点（JST）までの満年数を算出する。
  * 日数や時刻・うるう年の影響を受けない年月比較のみで決定論的に計算する。
  */
-export const calculateElapsedYears = (
-  start: YearMonth,
-  reference?: TimeReference,
-): number => {
-  const { year: currentYear, month: currentMonth } =
-    getCurrentYearMonth(reference)
+export const calculateElapsedYears = (start: YearMonth, reference?: TimeReference): number => {
+  const { year: currentYear, month: currentMonth } = getCurrentYearMonth(reference)
   let years = currentYear - start.year
   if (currentMonth < start.month) {
     years -= 1
@@ -90,8 +81,7 @@ export const calculateDurationMonths = (
   reference?: TimeReference,
 ): number => {
   const resolvedEnd = end ?? getCurrentYearMonth(reference)
-  const totalMonths =
-    (resolvedEnd.year - start.year) * 12 + (resolvedEnd.month - start.month) + 1
+  const totalMonths = (resolvedEnd.year - start.year) * 12 + (resolvedEnd.month - start.month) + 1
   return Math.max(1, totalMonths)
 }
 
@@ -106,10 +96,7 @@ export const formatDurationLabel = (months: number): LocalizedText => ({
 /**
  * 開始年月と終了年月（省略時は「現在 / Present」）から日英の期間文字列を生成する。
  */
-const formatPeriodRange = (
-  start: YearMonth,
-  end?: YearMonth,
-): LocalizedText => {
+const formatPeriodRange = (start: YearMonth, end?: YearMonth): LocalizedText => {
   const startMonthEn = EN_MONTH_NAMES[start.month - 1] ?? "Jan"
   const startJa = `${start.year}年${start.month}月`
   const startEn = `${startMonthEn} ${start.year}`

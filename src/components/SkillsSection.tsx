@@ -4,12 +4,7 @@ import { RANK_LEGEND, RANK_SCORE, SKILL_CATEGORIES } from "../data/constants"
 import { UI_TEXT } from "../data/i18n"
 import { filterSkills } from "../utils/filters"
 import styles from "../styles/modules/SkillsSection.module.css"
-import type {
-  Locale,
-  SkillCategoryKey,
-  SkillItem,
-  SkillRank,
-} from "../types/portfolio"
+import type { Locale, SkillCategoryKey, SkillItem, SkillRank } from "../types/portfolio"
 
 interface SkillsSectionProps {
   skills: SkillItem[]
@@ -60,20 +55,14 @@ export const SkillsSection = ({
         </div>
 
         <div className={styles.skillsControls}>
-          <div
-            className={styles.categoryTabs}
-            role="tablist"
-            aria-label="Skill Categories"
-          >
+          <div className={styles.categoryTabs} role="tablist" aria-label="Skill Categories">
             {SKILL_CATEGORIES.map((cat) => (
               <button
                 key={cat.key}
                 type="button"
                 role="tab"
                 aria-selected={category === cat.key}
-                className={`${styles.tabBtn} ${
-                  category === cat.key ? styles.tabBtnActive : ""
-                }`}
+                className={`${styles.tabBtn} ${category === cat.key ? styles.tabBtnActive : ""}`}
                 onClick={() => setCategory(cat.key)}
               >
                 {cat[locale]}
@@ -99,9 +88,7 @@ export const SkillsSection = ({
               <select
                 className="filter-select"
                 value={minRank}
-                onChange={(e) =>
-                  setMinRank(e.target.value as SkillRank | "all")
-                }
+                onChange={(e) => setMinRank(e.target.value as SkillRank | "all")}
                 aria-label={t.minRankLabel}
               >
                 <option value="all">{t.rankAll}</option>
@@ -118,11 +105,7 @@ export const SkillsSection = ({
             const score = RANK_SCORE[item.rank]
             return (
               <span key={item.rank} className={styles.legendItem}>
-                <span
-                  className={`${styles.rankBadge} ${
-                    RANK_BADGE_CLASS[score] ?? ""
-                  }`}
-                >
+                <span className={`${styles.rankBadge} ${RANK_BADGE_CLASS[score] ?? ""}`}>
                   {item.rank}
                 </span>
                 <span>{item[locale]}</span>
@@ -146,35 +129,25 @@ export const SkillsSection = ({
                 <button
                   key={skill.id}
                   type="button"
-                  className={`${styles.skillCard} ${
-                    isSelected ? styles.skillSelected : ""
-                  }`}
+                  className={`${styles.skillCard} ${isSelected ? styles.skillSelected : ""}`}
                   onClick={() => {
                     onSelectTech(isSelected ? "all" : cleanName)
                   }}
                 >
                   <div className={styles.skillCardTop}>
                     <span className={styles.skillName}>{skill.name}</span>
-                    <span
-                      className={`${styles.rankBadge} ${
-                        RANK_BADGE_CLASS[score] ?? ""
-                      }`}
-                    >
+                    <span className={`${styles.rankBadge} ${RANK_BADGE_CLASS[score] ?? ""}`}>
                       {skill.rank}
                     </span>
                   </div>
                   <div className={styles.skillBarTrack} aria-hidden="true">
                     <div
-                      className={`${styles.skillBarFill} ${
-                        RANK_FILL_CLASS[score] ?? ""
-                      }`}
+                      className={`${styles.skillBarFill} ${RANK_FILL_CLASS[score] ?? ""}`}
                       style={{ width: `${(score / 5) * 100}%` }}
                     />
                   </div>
                   <div>
-                    <span className={styles.skillYears}>
-                      {skill.yearsLabel[locale]}
-                    </span>
+                    <span className={styles.skillYears}>{skill.yearsLabel[locale]}</span>
                   </div>
                 </button>
               )

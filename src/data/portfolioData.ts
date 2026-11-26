@@ -7,29 +7,20 @@ type ProfileModule = typeof sampleProfile
 type ProjectsModule = typeof sampleProjects
 type SkillsModule = typeof sampleSkills
 
-const privateProfileModules = import.meta.glob<ProfileModule>(
-  "./private/profile.ts",
-  { eager: true },
-)
-const privateProjectsModules = import.meta.glob<ProjectsModule>(
-  "./private/projects.ts",
-  { eager: true },
-)
-const privateSkillsModules = import.meta.glob<SkillsModule>(
-  "./private/skills.ts",
-  { eager: true },
-)
+const privateProfileModules = import.meta.glob<ProfileModule>("./private/profile.ts", {
+  eager: true,
+})
+const privateProjectsModules = import.meta.glob<ProjectsModule>("./private/projects.ts", {
+  eager: true,
+})
+const privateSkillsModules = import.meta.glob<SkillsModule>("./private/skills.ts", { eager: true })
 
 const privateProfile = Object.values(privateProfileModules)[0]
 const privateProjects = Object.values(privateProjectsModules)[0]
 const privateSkills = Object.values(privateSkillsModules)[0]
 
-const resolvedProfile = privateProfile?.profileInfo
-  ? privateProfile
-  : sampleProfile
-const resolvedProjects = privateProjects?.projectsData
-  ? privateProjects
-  : sampleProjects
+const resolvedProfile = privateProfile?.profileInfo ? privateProfile : sampleProfile
+const resolvedProjects = privateProjects?.projectsData ? privateProjects : sampleProjects
 const resolvedSkills = privateSkills?.skillsData ? privateSkills : sampleSkills
 
 export const samplePortfolioData: PortfolioData = {
@@ -54,14 +45,12 @@ export const portfolioData: PortfolioData = {
 
 const asRecord = (value: unknown): Record<string, unknown> | null =>
   typeof value === "object" && value !== null && !Array.isArray(value)
-    ? value as Record<string, unknown>
+    ? (value as Record<string, unknown>)
     : null
 
 const isLocalizedText = (value: unknown): boolean => {
   const obj = asRecord(value)
-  return (
-    obj !== null && typeof obj.ja === "string" && typeof obj.en === "string"
-  )
+  return obj !== null && typeof obj.ja === "string" && typeof obj.en === "string"
 }
 
 const isYearMonth = (value: unknown): boolean => {
@@ -104,4 +93,4 @@ const isValidPortfolioData = (value: unknown): boolean => {
 }
 
 export const parsePortfolioData = (value: unknown): PortfolioData | null =>
-  isValidPortfolioData(value) ? value as PortfolioData : null
+  isValidPortfolioData(value) ? (value as PortfolioData) : null

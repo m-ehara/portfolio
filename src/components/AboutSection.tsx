@@ -1,12 +1,4 @@
-import {
-  Bot,
-  CheckCircle2,
-  Cpu,
-  GitBranch,
-  Layers,
-  ShieldCheck,
-  Users2,
-} from "lucide-react"
+import { Bot, CheckCircle2, Cpu, GitBranch, Layers, ShieldCheck, Users2 } from "lucide-react"
 import { RANK_LEGEND } from "../data/constants"
 import { UI_TEXT } from "../data/i18n"
 import styles from "../styles/modules/AboutSection.module.css"
@@ -45,13 +37,9 @@ export const AboutSection = ({ data, locale }: AboutSectionProps) => {
                   <span className={styles.specialtyIcon}>
                     <IconComponent size={20} />
                   </span>
-                  <h3 className={styles.specialtyTitle}>
-                    {item.title[locale]}
-                  </h3>
+                  <h3 className={styles.specialtyTitle}>{item.title[locale]}</h3>
                 </div>
-                <p className={styles.specialtyDesc}>
-                  {item.description[locale]}
-                </p>
+                <p className={styles.specialtyDesc}>{item.description[locale]}</p>
                 {item.details && item.details.length > 0 && (
                   <ul className={styles.specialtyDetails}>
                     {item.details.map((detail, idx) => (
@@ -78,16 +66,10 @@ export const AboutSection = ({ data, locale }: AboutSectionProps) => {
               {data.careerSummaries.map((career) => (
                 <div key={career.id} className={styles.careerBlock}>
                   <div>
-                    <span className={styles.careerPeriodBadge}>
-                      {career.period[locale]}
-                    </span>
-                    <h4 className={styles.careerBlockTitle}>
-                      {career.title[locale]}
-                    </h4>
+                    <span className={styles.careerPeriodBadge}>{career.period[locale]}</span>
+                    <h4 className={styles.careerBlockTitle}>{career.title[locale]}</h4>
                   </div>
-                  <p className={styles.careerBlockDesc}>
-                    {career.description[locale]}
-                  </p>
+                  <p className={styles.careerBlockDesc}>{career.description[locale]}</p>
                 </div>
               ))}
             </div>
@@ -106,9 +88,7 @@ export const AboutSection = ({ data, locale }: AboutSectionProps) => {
                 {data.roleExperiences.map((r) => (
                   <div
                     key={r.role}
-                    className={`${styles.roleCell} ${
-                      r.rank === "-" ? styles.noExp : ""
-                    }`}
+                    className={`${styles.roleCell} ${r.rank === "-" ? styles.noExp : ""}`}
                   >
                     <span>{r.label[locale]}</span>
                     <span className={styles.rankSymbol}>{r.rank}</span>

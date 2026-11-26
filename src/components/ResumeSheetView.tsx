@@ -4,12 +4,7 @@ import { UI_TEXT } from "../data/i18n"
 import { formatYearMonthSlash } from "../utils/date"
 import { formatTeamSizeItems } from "../utils/formatters"
 import styles from "../styles/modules/ResumeSheetView.module.css"
-import type {
-  Locale,
-  PortfolioData,
-  SkillCategoryKey,
-  SkillItem,
-} from "../types/portfolio"
+import type { Locale, PortfolioData, SkillCategoryKey, SkillItem } from "../types/portfolio"
 
 interface ResumeSheetViewProps {
   data: PortfolioData
@@ -29,11 +24,7 @@ interface SkillSectionConfig {
   groups: SkillSectionGroup[]
 }
 
-export const ResumeSheetView = ({
-  data,
-  locale,
-  onPrint,
-}: ResumeSheetViewProps) => {
+export const ResumeSheetView = ({ data, locale, onPrint }: ResumeSheetViewProps) => {
   const t = UI_TEXT[locale]
 
   const skillsByCategory = new Map<SkillCategoryKey, SkillItem[]>()
@@ -68,14 +59,8 @@ export const ResumeSheetView = ({
     },
   ]
 
-  const phaseGapColSpan = Math.max(
-    0,
-    data.roleExperiences.length - data.phaseExperiences.length,
-  )
-  const roleGapColSpan = Math.max(
-    0,
-    data.phaseExperiences.length - data.roleExperiences.length,
-  )
+  const phaseGapColSpan = Math.max(0, data.roleExperiences.length - data.phaseExperiences.length)
+  const roleGapColSpan = Math.max(0, data.phaseExperiences.length - data.roleExperiences.length)
 
   return (
     <div className={styles.resumeSheetWrapper}>
@@ -104,17 +89,13 @@ export const ResumeSheetView = ({
 
           {/* 自己PR */}
           <div className={styles.sheetSection}>
-            <div className={styles.sheetSectionTitle}>
-              {t.resumeSelfPrTitle}
-            </div>
+            <div className={styles.sheetSectionTitle}>{t.resumeSelfPrTitle}</div>
             <div className={styles.sheetBoxContent}>
               <p className={styles.sheetLineBold}>
                 {t.resumeRolePrefix}
                 {data.jobTitle[locale]}
               </p>
-              <p className={`${styles.sheetLineBold} ${styles.mtXs}`}>
-                {t.resumeStrengthsPrefix}
-              </p>
+              <p className={`${styles.sheetLineBold} ${styles.mtXs}`}>{t.resumeStrengthsPrefix}</p>
               <ul className={styles.sheetPrList}>
                 {data.specialties.map((spec) => (
                   <li key={spec.id}>
@@ -134,9 +115,7 @@ export const ResumeSheetView = ({
 
           {/* 経歴概要 */}
           <div className={styles.sheetSection}>
-            <div className={styles.sheetSectionTitle}>
-              {t.careerOverviewTitle}
-            </div>
+            <div className={styles.sheetSectionTitle}>{t.careerOverviewTitle}</div>
             <div className={styles.sheetBoxContent}>
               {[...data.careerSummaries].reverse().map((c) => (
                 <div key={c.id} className={styles.sheetCareerItem}>
@@ -144,9 +123,7 @@ export const ResumeSheetView = ({
                     【{c.title[locale]}】 {t.resumePeriodPrefix}
                     {c.period[locale]}
                   </div>
-                  <p className={styles.sheetParagraph}>
-                    {c.description[locale]}
-                  </p>
+                  <p className={styles.sheetParagraph}>{c.description[locale]}</p>
                 </div>
               ))}
             </div>
@@ -163,9 +140,7 @@ export const ResumeSheetView = ({
 
           {/* 担当領域・工程 */}
           <div className={styles.sheetSection}>
-            <div className={styles.sheetSubtitleBar}>
-              【{t.rolesAndPhasesTitle}】
-            </div>
+            <div className={styles.sheetSubtitleBar}>【{t.rolesAndPhasesTitle}】</div>
             <table className={styles.sheetTable}>
               <tbody>
                 <tr>
@@ -256,22 +231,15 @@ export const ResumeSheetView = ({
               <tbody>
                 {data.projects.map((p) => (
                   <tr key={p.id}>
-                    <td className={`${styles.textCenter} ${styles.fontMono}`}>
-                      {p.id}
-                    </td>
+                    <td className={`${styles.textCenter} ${styles.fontMono}`}>{p.id}</td>
                     <td>
                       <div>{p.period[locale]}</div>
-                      <div className={styles.subMuted}>
-                        ({p.durationLabel[locale]})
-                      </div>
+                      <div className={styles.subMuted}>({p.durationLabel[locale]})</div>
                     </td>
                     <td>
-                      <div className={styles.sheetProjTitle}>
-                        ■ {p.title[locale]}
-                      </div>
+                      <div className={styles.sheetProjTitle}>■ {p.title[locale]}</div>
                       <div className={styles.sheetProjBlock}>
-                        <strong>≪{t.responsibilitiesLabel}≫</strong>{" "}
-                        {p.responsibilities[locale]}
+                        <strong>≪{t.responsibilitiesLabel}≫</strong> {p.responsibilities[locale]}
                       </div>
                       {p.acquiredSkills.length > 0 && (
                         <div className={styles.sheetProjBlock}>
@@ -288,29 +256,22 @@ export const ResumeSheetView = ({
                       </div>
                       {p.evaluation && (
                         <div className={styles.sheetProjBlock}>
-                          <strong>≪{t.evaluationLabel}≫</strong>{" "}
-                          {p.evaluation[locale]}
+                          <strong>≪{t.evaluationLabel}≫</strong> {p.evaluation[locale]}
                         </div>
                       )}
                     </td>
                     <td className={styles.textCenter}>
-                      <div className={styles.fontBold}>
-                        {p.roles.join(", ")}
-                      </div>
-                      {formatTeamSizeItems(p.teamSize, locale).map(
-                        (item, idx) => (
-                          <div
-                            key={item}
-                            className={
-                              idx === 0
-                                ? `${styles.subMuted} ${styles.mtXs}`
-                                : styles.subMuted
-                            }
-                          >
-                            {item}
-                          </div>
-                        ),
-                      )}
+                      <div className={styles.fontBold}>{p.roles.join(", ")}</div>
+                      {formatTeamSizeItems(p.teamSize, locale).map((item, idx) => (
+                        <div
+                          key={item}
+                          className={
+                            idx === 0 ? `${styles.subMuted} ${styles.mtXs}` : styles.subMuted
+                          }
+                        >
+                          {item}
+                        </div>
+                      ))}
                     </td>
                     <td>
                       {p.languages.map((l) => (
@@ -322,9 +283,7 @@ export const ResumeSheetView = ({
                       {p.databases.map((d) => (
                         <div key={d}>{d}</div>
                       ))}
-                      <div className={`${styles.fontBold} ${styles.mtXs}`}>
-                        OS:
-                      </div>
+                      <div className={`${styles.fontBold} ${styles.mtXs}`}>OS:</div>
                       {p.serverOs.map((o) => (
                         <div key={o}>{o}</div>
                       ))}

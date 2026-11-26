@@ -10,10 +10,7 @@ export interface TurnstileRenderOptions {
 }
 
 interface TurnstileInstance {
-  render: (
-    container: string | HTMLElement,
-    options: TurnstileRenderOptions,
-  ) => string
+  render: (container: string | HTMLElement, options: TurnstileRenderOptions) => string
   reset: (widgetId?: string) => void
   remove: (widgetId?: string) => void
 }

@@ -1,10 +1,5 @@
 import { RANK_SCORE } from "../data/constants"
-import type {
-  ProjectItem,
-  SkillCategoryKey,
-  SkillItem,
-  SkillRank,
-} from "../types/portfolio"
+import type { ProjectItem, SkillCategoryKey, SkillItem, SkillRank } from "../types/portfolio"
 
 interface FilterSkillsOptions {
   category?: SkillCategoryKey | "all"
@@ -12,10 +7,7 @@ interface FilterSkillsOptions {
   query?: string
 }
 
-export const filterSkills = (
-  skills: SkillItem[],
-  options: FilterSkillsOptions,
-): SkillItem[] => {
+export const filterSkills = (skills: SkillItem[], options: FilterSkillsOptions): SkillItem[] => {
   const { category = "all", minRank = "all", query = "" } = options
   const normalizedQuery = query.trim().toLowerCase()
 
@@ -50,9 +42,7 @@ const parseTechVariants = (value: string): string[][] => {
   if (!trimmed) {
     return []
   }
-  const parts = trimmed.includes("/")
-    ? [trimmed, ...trimmed.split("/")]
-    : [trimmed]
+  const parts = trimmed.includes("/") ? [trimmed, ...trimmed.split("/")] : [trimmed]
   const variants: string[][] = []
   for (const part of parts) {
     const tokens = tokenizeTech(part)
@@ -63,10 +53,7 @@ const parseTechVariants = (value: string): string[][] => {
   return variants
 }
 
-const containsTokenSequence = (
-  haystack: string[],
-  needle: string[],
-): boolean => {
+const containsTokenSequence = (haystack: string[], needle: string[]): boolean => {
   if (needle.length === 0 || needle.length > haystack.length) {
     return false
   }
@@ -85,15 +72,10 @@ const containsTokenSequence = (
   return false
 }
 
-const matchesTechVariants = (
-  candidate: string,
-  targetVariants: string[][],
-): boolean => {
+const matchesTechVariants = (candidate: string, targetVariants: string[][]): boolean => {
   const candidateVariants = parseTechVariants(candidate)
   return candidateVariants.some((candTokens) =>
-    targetVariants.some((targetTokens) =>
-      containsTokenSequence(candTokens, targetTokens),
-    ),
+    targetVariants.some((targetTokens) => containsTokenSequence(candTokens, targetTokens)),
   )
 }
 

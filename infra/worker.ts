@@ -25,8 +25,7 @@ export interface TurnstileVerifyResult {
   errorCodes?: string[]
 }
 
-const TURNSTILE_SITEVERIFY_URL =
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+const TURNSTILE_SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 
 // Cloudflare official dummy secret key for local testing when TURNSTILE_SECRET_KEY is not set
 const TURNSTILE_DUMMY_SECRET_KEY = "1x0000000000000000000000000000000AA"
@@ -54,10 +53,7 @@ const JSON_HEADERS: Record<string, string> = {
   "Content-Type": "application/json; charset=utf-8",
 }
 
-const timingSafeEqualString = async (
-  a: string,
-  b: string,
-): Promise<boolean> => {
+const timingSafeEqualString = async (a: string, b: string): Promise<boolean> => {
   const encoder = new TextEncoder()
   const [aHash, bHash] = await Promise.all([
     crypto.subtle.digest("SHA-256", encoder.encode(a)),
@@ -173,51 +169,38 @@ const readPortfolioDataFromKv = async (env: Env): Promise<unknown> => {
   }
 }
 
-const handleTurnstileVerify = async (
-  request: Request,
-  env: Env,
-): Promise<Response> => {
+const handleTurnstileVerify = async (request: Request, env: Env): Promise<Response> => {
   if (request.method !== "POST") {
-    return new Response(
-      JSON.stringify({ verified: false, error: "Method Not Allowed" }),
-      {
-        status: 405,
-        headers: {
-          ...JSON_HEADERS,
-          Allow: "POST",
-        },
+    return new Response(JSON.stringify({ verified: false, error: "Method Not Allowed" }), {
+      status: 405,
+      headers: {
+        ...JSON_HEADERS,
+        Allow: "POST",
       },
-    )
+    })
   }
 
   let body: { token?: unknown }
   try {
-    body = ((await request.json()) as { token?: unknown })
+    body = (await request.json()) as { token?: unknown }
   } catch {
-    return new Response(
-      JSON.stringify({ verified: false, error: "Invalid JSON payload." }),
-      {
-        status: 400,
-        headers: JSON_HEADERS,
-      },
-    )
+    return new Response(JSON.stringify({ verified: false, error: "Invalid JSON payload." }), {
+      status: 400,
+      headers: JSON_HEADERS,
+    })
   }
 
   const token = typeof body.token === "string" ? body.token.trim() : ""
   if (!token) {
-    return new Response(
-      JSON.stringify({ verified: false, error: "Missing Turnstile token." }),
-      {
-        status: 400,
-        headers: JSON_HEADERS,
-      },
-    )
+    return new Response(JSON.stringify({ verified: false, error: "Missing Turnstile token." }), {
+      status: 400,
+      headers: JSON_HEADERS,
+    })
   }
 
   const hostname = new URL(request.url).hostname
   const secretKey =
-    env.TURNSTILE_SECRET_KEY ||
-    (isLocalHostname(hostname) ? TURNSTILE_DUMMY_SECRET_KEY : "")
+    env.TURNSTILE_SECRET_KEY || (isLocalHostname(hostname) ? TURNSTILE_DUMMY_SECRET_KEY : "")
   if (!secretKey) {
     return new Response(
       JSON.stringify({
@@ -249,10 +232,7 @@ const handleTurnstileVerify = async (
   }
 
   const portfolioData = await readPortfolioDataFromKv(env)
-  const payload =
-    portfolioData !== null
-      ? { verified: true, portfolioData }
-      : { verified: true }
+  const payload = portfolioData !== null ? { verified: true, portfolioData } : { verified: true }
 
   return new Response(JSON.stringify(payload), {
     status: 200,
@@ -277,11 +257,7 @@ export default {
     }
 
     const authHeader = request.headers.get("Authorization")
-    const isAuthorized = await verifyBasicAuth(
-      authHeader,
-      expectedUser,
-      expectedPass,
-    )
+    const isAuthorized = await verifyBasicAuth(authHeader, expectedUser, expectedPass)
 
     if (!isAuthorized) {
       return new Response("401 Unauthorized", {

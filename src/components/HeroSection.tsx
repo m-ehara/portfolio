@@ -9,18 +9,9 @@ import {
   Users,
 } from "lucide-react"
 import { UI_TEXT } from "../data/i18n"
-import {
-  calculateElapsedYears,
-  formatElapsedYearsLabel,
-  formatYearMonthSlash,
-} from "../utils/date"
+import { calculateElapsedYears, formatElapsedYearsLabel, formatYearMonthSlash } from "../utils/date"
 import styles from "../styles/modules/HeroSection.module.css"
-import type {
-  Locale,
-  PortfolioData,
-  ViewMode,
-  YearMonth,
-} from "../types/portfolio"
+import type { Locale, PortfolioData, ViewMode, YearMonth } from "../types/portfolio"
 
 interface HeroSectionProps {
   data: PortfolioData
@@ -32,20 +23,13 @@ interface HeroSectionProps {
 const formatStartYearMonth = (ym: YearMonth): string =>
   `${ym.year}.${String(ym.month).padStart(2, "0")}`
 
-export const HeroSection = ({
-  data,
-  locale,
-  onSelectTech,
-  onChangeViewMode,
-}: HeroSectionProps) => {
+export const HeroSection = ({ data, locale, onSelectTech, onChangeViewMode }: HeroSectionProps) => {
   const t = UI_TEXT[locale]
   const currentUpdatedAt = formatYearMonthSlash()
-  const totalYearsValue = formatElapsedYearsLabel(
-    calculateElapsedYears(data.careerStart),
-  )[locale]
-  const freelanceYearsValue = formatElapsedYearsLabel(
-    calculateElapsedYears(data.freelanceStart),
-  )[locale]
+  const totalYearsValue = formatElapsedYearsLabel(calculateElapsedYears(data.careerStart))[locale]
+  const freelanceYearsValue = formatElapsedYearsLabel(calculateElapsedYears(data.freelanceStart))[
+    locale
+  ]
   const careerStartStr = formatStartYearMonth(data.careerStart)
   const freelanceStartStr = formatStartYearMonth(data.freelanceStart)
   const projectsCountValue = `${data.projects.length}${t.projectsCountUnit}`
@@ -63,12 +47,7 @@ export const HeroSection = ({
             <span className={styles.statusDot} />
             {t.updatedAt}: {currentUpdatedAt}
           </span>
-          <a
-            href={data.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.githubPill}
-          >
+          <a href={data.githubUrl} target="_blank" rel="noreferrer" className={styles.githubPill}>
             <span>@{data.handle}</span>
             <ExternalLink size={13} />
           </a>
@@ -76,9 +55,7 @@ export const HeroSection = ({
 
         <h1 className={styles.heroTitle}>
           <span className={styles.heroName}>{data.name[locale]}</span>
-          <span className={styles.heroRoleGradient}>
-            {data.jobTitle[locale]}
-          </span>
+          <span className={styles.heroRoleGradient}>{data.jobTitle[locale]}</span>
         </h1>
 
         <p className={styles.heroTagline}>{data.tagline[locale]}</p>

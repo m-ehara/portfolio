@@ -1,9 +1,5 @@
 import { expect, test } from "@playwright/test"
-import {
-  setupVrtHooks,
-  stabilizeForScreenshot,
-  waitForPageReady,
-} from "./helper"
+import { setupVrtHooks, stabilizeForScreenshot, waitForPageReady } from "./helper"
 
 test.describe("Portfolio Visual Regression Tests - Skill Sheet & Print View", () => {
   test.beforeEach(async ({ page }) => {
