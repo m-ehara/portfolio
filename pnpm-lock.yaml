@@ -187,7 +187,7 @@ importers:
     dependencies:
       lucide-react:
         specifier: ^1.16.0
-        version: 1.76.0(@types/react@19.3.0)(react@19.3.1)
+        version: 1.79.0(@types/react@19.3.0)(react@19.3.1)
       react:
         specifier: ^19.1.0
         version: 19.3.1
@@ -215,10 +215,10 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: 4.7.0
-        version: 4.7.0(vite@6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))
+        version: 4.7.0(supports-color@10.2.2)(vite@6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))
       jsdom:
         specifier: 26.1.0
-        version: 26.1.0
+        version: 26.1.0(supports-color@10.2.2)
       knip:
         specifier: 6.48.0
         version: 6.48.0
@@ -236,10 +236,10 @@ importers:
         version: 6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1)
       vitest:
         specifier: ^3.1.3
-        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1)
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1)
       wrangler:
         specifier: 4.166.0
-        version: 4.166.0(@types/node@22.20.5)(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1))
+        version: 4.166.0(@types/node@22.20.5)(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1))
 
 packages:
 
@@ -2003,8 +2003,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@1.76.0:
-    resolution: {integrity: sha512-wRVHt2Xf64GXndB4rQOY9+3Wy9oJ59HDMYv6vwhT0hpSwUxQhG/RM9YijnOmvmIQ+VI/n+1V/FKd6gP4XL2aBQ==}
+  lucide-react@1.79.0:
+    resolution: {integrity: sha512-MDHKxzUobPRyQgt4hHO1z+pUQJKYMvenh8qw+ndWQE0Wg+Hbjli/ZrkZXBGmRBrMvvqDRjkmQj0Z5RbeL/ogNw==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2508,20 +2508,20 @@ snapshots:
 
   '@babel/compat-data@7.29.7': {}
 
-  '@babel/core@7.29.7':
+  '@babel/core@7.29.7(supports-color@10.2.2)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.12
       '@babel/helper-compilation-targets': 7.29.7
-      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7)
+      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
       '@babel/helpers': 7.29.10
       '@babel/parser': 7.29.12
       '@babel/template': 7.29.7
-      '@babel/traverse': 7.29.12
+      '@babel/traverse': 7.29.12(supports-color@10.2.2)
       '@babel/types': 7.29.11
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -2546,19 +2546,19 @@ snapshots:
 
   '@babel/helper-globals@7.29.7': {}
 
-  '@babel/helper-module-imports@7.29.7':
+  '@babel/helper-module-imports@7.29.7(supports-color@10.2.2)':
     dependencies:
-      '@babel/traverse': 7.29.12
+      '@babel/traverse': 7.29.12(supports-color@10.2.2)
       '@babel/types': 7.29.11
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-transforms@7.29.7(@babel/core@7.29.7)':
+  '@babel/helper-module-transforms@7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
-      '@babel/core': 7.29.7
-      '@babel/helper-module-imports': 7.29.7
+      '@babel/core': 7.29.7(supports-color@10.2.2)
+      '@babel/helper-module-imports': 7.29.7(supports-color@10.2.2)
       '@babel/helper-validator-identifier': 7.29.7
-      '@babel/traverse': 7.29.12
+      '@babel/traverse': 7.29.12(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -2579,14 +2579,14 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.11
 
-  '@babel/plugin-transform-react-jsx-self@7.29.7(@babel/core@7.29.7)':
+  '@babel/plugin-transform-react-jsx-self@7.29.7(@babel/core@7.29.7(supports-color@10.2.2))':
     dependencies:
-      '@babel/core': 7.29.7
+      '@babel/core': 7.29.7(supports-color@10.2.2)
       '@babel/helper-plugin-utils': 7.29.7
 
-  '@babel/plugin-transform-react-jsx-source@7.29.7(@babel/core@7.29.7)':
+  '@babel/plugin-transform-react-jsx-source@7.29.7(@babel/core@7.29.7(supports-color@10.2.2))':
     dependencies:
-      '@babel/core': 7.29.7
+      '@babel/core': 7.29.7(supports-color@10.2.2)
       '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/runtime@7.29.15': {}
@@ -2597,7 +2597,7 @@ snapshots:
       '@babel/parser': 7.29.12
       '@babel/types': 7.29.11
 
-  '@babel/traverse@7.29.12':
+  '@babel/traverse@7.29.12(supports-color@10.2.2)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.12
@@ -2605,7 +2605,7 @@ snapshots:
       '@babel/parser': 7.29.12
       '@babel/template': 7.29.7
       '@babel/types': 7.29.11
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -2637,14 +2637,14 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20261119.1':
     optional: true
 
-  '@cloudflare/workers-utils@0.56.0(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1))':
+  '@cloudflare/workers-utils@0.56.0(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1))':
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       chalk: 5.3.0
       dotenv: 16.3.1
       undici: 7.30.2
     optionalDependencies:
-      vitest: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1)
+      vitest: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1)
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -3442,11 +3442,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitejs/plugin-react@4.7.0(vite@6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))':
+  '@vitejs/plugin-react@4.7.0(supports-color@10.2.2)(vite@6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))':
     dependencies:
-      '@babel/core': 7.29.7
-      '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7)
-      '@babel/plugin-transform-react-jsx-source': 7.29.7(@babel/core@7.29.7)
+      '@babel/core': 7.29.7(supports-color@10.2.2)
+      '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))
+      '@babel/plugin-transform-react-jsx-source': 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
@@ -3585,9 +3585,11 @@ snapshots:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
 
-  debug@4.4.3:
+  debug@4.4.3(supports-color@10.2.2):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 10.2.2
 
   decimal.js@10.6.0: {}
 
@@ -3777,17 +3779,17 @@ snapshots:
     dependencies:
       whatwg-encoding: 3.1.1
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@10.2.2):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@10.2.2):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -3809,14 +3811,14 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  jsdom@26.1.0:
+  jsdom@26.1.0(supports-color@10.2.2):
     dependencies:
       cssstyle: 4.6.0
       data-urls: 5.0.0
       decimal.js: 10.6.0
       html-encoding-sniffer: 4.0.0
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@10.2.2)
+      https-proxy-agent: 7.0.6(supports-color@10.2.2)
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.28
       parse5: 7.3.0
@@ -3864,7 +3866,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@1.76.0(@types/react@19.3.0)(react@19.3.1):
+  lucide-react@1.79.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
@@ -4229,10 +4231,10 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  vite-node@3.2.4(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1):
+  vite-node@3.2.4(@types/node@22.20.5)(jiti@2.7.0)(supports-color@10.2.2)(yaml@2.9.1):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       es-module-lexer: 1.7.0
       pathe: 2.0.3
       vite: 6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1)
@@ -4264,7 +4266,7 @@ snapshots:
       jiti: 2.7.0
       yaml: 2.9.1
 
-  vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1):
+  vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/expect': 3.2.7
@@ -4275,7 +4277,7 @@ snapshots:
       '@vitest/spy': 3.2.7
       '@vitest/utils': 3.2.7
       chai: 5.3.3
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       expect-type: 1.4.0
       magic-string: 0.30.21
       pathe: 2.0.3
@@ -4287,11 +4289,11 @@ snapshots:
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
       vite: 6.4.6(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1)
-      vite-node: 3.2.4(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1)
+      vite-node: 3.2.4(@types/node@22.20.5)(jiti@2.7.0)(supports-color@10.2.2)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.20.5
-      jsdom: 26.1.0
+      jsdom: 26.1.0(supports-color@10.2.2)
     transitivePeerDependencies:
       - jiti
       - less
@@ -4347,11 +4349,11 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20261119.1
       '@cloudflare/workerd-windows-64': 1.20261119.1
 
-  wrangler@4.166.0(@types/node@22.20.5)(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1)):
+  wrangler@4.166.0(@types/node@22.20.5)(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1)):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.1
       '@cloudflare/unenv-preset': 2.16.2(unenv@2.0.0-rc.24)(workerd@1.20261119.1)
-      '@cloudflare/workers-utils': 0.56.0(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0)(yaml@2.9.1))
+      '@cloudflare/workers-utils': 0.56.0(vitest@3.2.7(@types/node@22.20.5)(jiti@2.7.0)(jsdom@26.1.0(supports-color@10.2.2))(supports-color@10.2.2)(yaml@2.9.1))
       '@cspotcode/source-map-support': 0.8.1
       '@types/yargs': 17.0.24
       cloudflare: 5.2.0
